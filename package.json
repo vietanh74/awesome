@@ -1,7 +1,8 @@
 {
-  "name": "vite-ts-boilerplate",
+  "name": "awesome",
   "private": true,
   "version": "0.0.0",
+  "homepage": "https://vietanh74.github.io/awesome",
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
@@ -22,8 +23,10 @@
     "ant-design-vue": "^3.2.2",
     "axios": "^0.26.1",
     "date-fns": "^2.28.0",
+    "gh-pages": "^4.0.0",
     "lodash-es": "^4.17.21",
     "pinia": "^2.0.13",
+    "save-dev": "^0.0.1-security",
     "tailwindcss": "^3.0.24",
     "vue": "^3.2.25",
     "vue-router": "^4.0.14"
