@@ -65,7 +65,7 @@
 
 <script lang="ts">
 import { PropType, defineComponent } from 'vue';
-import { get } from 'lodash';
+import { get } from 'lodash-es';
 import { Spin } from 'ant-design-vue';
 
 import { IColumn, IDataSource, IPaginator } from './types';

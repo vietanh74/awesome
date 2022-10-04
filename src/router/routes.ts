@@ -17,14 +17,10 @@ const routes: RouteRecordRaw[] = [
     meta: { layout: 'defaultNoHeader' },
   },
   {
-    path: 'shop-lives',
-    name: RouteName.SHOP_LIVES,
-    component: () => import('@/modules/shopProblem/pages/Lives/index.vue'),
-  },
-  {
-    path: 'shop-new-registation',
-    name: RouteName.NEW_REGISTATION,
-    component: () => import('@/modules/shopProblem/pages/NewRegistation/index.vue'),
+    path: 'cham-cong',
+    name: RouteName.LOG_WORK,
+    component: () => import('@/modules/logWork/index.vue'),
+    meta: { layout: 'defaultNoHeader' },
   },
 ];
 
