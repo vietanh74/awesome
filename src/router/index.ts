@@ -4,7 +4,7 @@ import routes from './routes';
 import MainLayout from '@/shared/layout/MainLayout/index.vue';
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory(import.meta.env.VITE_APP_SUB_FOLDER),
   routes: [
     {
       path: '',
