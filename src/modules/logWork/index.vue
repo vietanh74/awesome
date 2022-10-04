@@ -3,11 +3,15 @@ import { reactive, onMounted } from 'vue';
 
 import { size } from 'lodash-es';
 
-const state = reactive({
+const SETUP_VAR = {
   tinhChoThang: 9,
   myTongCong: 22,
   ngayNghiFull: [7, 8, 23],
   ngayLam3h: [1, 13, 20, 24, 27, 30],
+};
+
+const state = reactive({
+  ...SETUP_VAR,
   soNgayCong: 0,
   thanhTien: 0,
 });
