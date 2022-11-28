@@ -4,10 +4,11 @@ import { reactive, onMounted } from 'vue';
 import { size } from 'lodash-es';
 
 const SETUP_VAR = {
-  tinhChoThang: 10,
-  myTongCong: 23,
-  ngayNghiFull: [5, 6, 7, 8],
-  ngayLam3h: [4, 11, 14, 18, 21, 22, 25, 28],
+  tinhChoThang: 11,
+  myTongCong: 24,
+  ngayNghiFull: '4 21'.split(' '),
+  ngayLam3h: '1 5 8 10 11 12 15 18 22 25 29'.split(' '),
+  ngayLam2h: '2'.split(' '),
 };
 
 const state = reactive({
@@ -17,7 +18,8 @@ const state = reactive({
 });
 
 onMounted(() => {
-  state.soNgayCong = state.myTongCong - size(state.ngayNghiFull) - (size(state.ngayLam3h) * 1) / 4;
+  state.soNgayCong =
+    state.myTongCong - size(state.ngayNghiFull) - (size(state.ngayLam3h) * 1) / 4 - size(state.ngayLam2h) / 2;
   state.thanhTien = state.soNgayCong * 4 * 20000;
 });
 </script>
