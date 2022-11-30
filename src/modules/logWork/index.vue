@@ -18,13 +18,14 @@ import {
 import { CalendarVietnamese } from 'date-chinese';
 
 const SETUP_VAR = {
-  ngayLamMayTieng: 4,
   tinhChoThang: 11,
   tinhChoNam: 2022,
   ngayNghiFull: '4 21 29 30'.split(' '),
-  ngayLam3h: '1 10'.split(' '),
-  ngayLam2h: '2'.split(' '),
-  ngayDiLamDacBiet: {}, // { 13: 4 } ~ { [Ngày]: [Làm bao nhiêu giờ] }
+  ngayDiLamDacBiet: {
+    1: 3,
+    10: 3,
+    2: 2,
+  }, // { 13: 4 } ~ { [Ngày]: [Làm bao nhiêu giờ] }
   configNgayNghiHoacDiLam: {
     BA: 3,
     SAU: 3,
@@ -48,6 +49,8 @@ const THU = {
   6: 'BAY',
   0: 'CN',
 };
+
+const HOURS_OF_DAY = 4;
 
 onMounted(() => {
   let soGioCong = 0;
@@ -76,22 +79,12 @@ onMounted(() => {
       continue;
     }
 
+    if (state.ngayDiLamDacBiet[dayNumber]) {
+      soGioCong += state.ngayDiLamDacBiet[dayNumber];
+      continue;
+    }
+
     if (isVacationDay(item)) {
-      if (state.ngayDiLamDacBiet[dayNumber]) {
-        soGioCong += state.ngayDiLamDacBiet[dayNumber];
-        continue;
-      }
-
-      continue;
-    }
-
-    if (state.ngayLam3h.includes(dayNumber)) {
-      soGioCong += 3;
-      continue;
-    }
-
-    if (state.ngayLam2h.includes(dayNumber)) {
-      soGioCong += 2;
       continue;
     }
 
@@ -104,7 +97,7 @@ onMounted(() => {
       continue;
     }
 
-    soGioCong += state.ngayLamMayTieng;
+    soGioCong += HOURS_OF_DAY;
   }
 
   state.soGioCong = soGioCong;
@@ -175,20 +168,21 @@ function isOdd(n) {
       <strong>Ngày nghỉ full</strong>:
       {{ state.ngayNghiFull.map((item) => `${item}`).join(', ') }}
     </div>
+
     <div class="mb-4">
-      <strong>Ngày làm 3h</strong>:
-      {{ state.ngayLam3h.map((item) => `${item}`).join(', ') }}
+      <strong>Ngày đi làm khác với đã đăng ký</strong>:
+      <div v-for="(objectKey, index) in Object.keys(state.ngayDiLamDacBiet)" :key="index">
+        - Ngày <b>{{ objectKey }}</b> - làm {{ state.ngayDiLamDacBiet[objectKey] }}h
+      </div>
     </div>
-    <div class="mb-4">
-      <strong>Ngày làm 2h</strong>:
-      {{ state.ngayLam2h.map((item) => `${item}`).join(', ') }}
-    </div>
+
     <div class="mb-4">
       <strong>Ngày nghỉ hoặc đi làm thiếu giờ định kỳ</strong>:
       <div v-for="(item, index) in state.ngayDacBietDinhKy" :key="index">
         - Ngày <b>{{ item.ngay }}</b> - làm {{ item.soGio }}h
       </div>
     </div>
+
     <div class="mb-4"><strong>=> Số giờ làm việc</strong>: {{ state.soGioCong }}</div>
     <div><strong>=> Thành tiền</strong>: {{ state.thanhTien.toLocaleString() }}đ</div>
   </div>
