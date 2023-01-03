@@ -20,12 +20,8 @@ import { CalendarVietnamese } from 'date-chinese';
 const SETUP_VAR = {
   tinhChoThang: 11,
   tinhChoNam: 2022,
-  ngayNghiFull: '4 21 29 30'.split(' '),
-  ngayDiLamDacBiet: {
-    1: 3,
-    10: 3,
-    2: 2,
-  }, // { 13: 4 } ~ { [Ngày]: [Làm bao nhiêu giờ] }
+  ngayNghiFull: '1 2 13 21 23 26 27 28 29 30 31'.split(' '),
+  ngayDiLamDacBiet: {}, // { 13: 4 } ~ { [Ngày]: [Làm bao nhiêu giờ] }
   configNgayNghiHoacDiLam: {
     BA: 3,
     SAU: 3,
