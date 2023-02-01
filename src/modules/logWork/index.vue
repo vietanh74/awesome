@@ -18,14 +18,13 @@ import {
 import { CalendarVietnamese } from 'date-chinese';
 
 const SETUP_VAR = {
-  tinhChoThang: 12,
-  tinhChoNam: 2022,
-  ngayNghiFull: '1 2 13 21 23 26 27 28 29 30 31'.split(' '),
+  tinhChoThang: 2,
+  tinhChoNam: 2023,
+  ngayNghiFull: '1 2 3'.split(' '),
   ngayDiLamDacBiet: {}, // { 13: 4 } ~ { [Ngày]: [Làm bao nhiêu giờ] }
   configNgayNghiHoacDiLam: {
-    BA: 3,
-    SAU: 3,
-    BAY: 3,
+    HAI: 3,
+    NAM: 3,
   },
 };
 
