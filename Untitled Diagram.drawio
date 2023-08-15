@@ -1,9 +1,99 @@
-<mxfile host="app.diagrams.net" modified="2023-08-15T06:45:53.048Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36" version="21.6.8" etag="-VLLdkOAH_GIXt-xiIAN" type="github">
+<mxfile host="app.diagrams.net" modified="2023-08-15T07:02:14.492Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36" etag="GJlwQtRCPfcwKLt2nIOi" version="21.6.8" type="github">
   <diagram name="Page-1" id="U4UBDNRAVtoqkKmB2t2i">
-    <mxGraphModel>
+    <mxGraphModel dx="1382" dy="798" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
+        <mxCell id="HzKWt3v1qoBmAx57mhfK-1" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="250" y="100" width="10" height="580" as="geometry" />
+        </mxCell>
+        <mxCell id="HzKWt3v1qoBmAx57mhfK-2" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="540" y="100" width="10" height="580" as="geometry" />
+        </mxCell>
+        <mxCell id="HzKWt3v1qoBmAx57mhfK-3" value="" style="endArrow=open;endFill=1;endSize=12;html=1;rounded=0;" edge="1" parent="1" target="HzKWt3v1qoBmAx57mhfK-2">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="260" y="100" as="sourcePoint" />
+            <mxPoint x="420" y="100" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HzKWt3v1qoBmAx57mhfK-4" value="App" style="html=1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="220" y="50" width="70" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="HzKWt3v1qoBmAx57mhfK-5" value="Facebook" style="html=1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="507.5" y="50" width="75" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="HzKWt3v1qoBmAx57mhfK-7" value="Get posts" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="340" y="70" width="86" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="HzKWt3v1qoBmAx57mhfK-8" value="" style="endArrow=block;dashed=1;endFill=0;endSize=12;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="540" y="130" as="sourcePoint" />
+            <mxPoint x="260" y="130" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HzKWt3v1qoBmAx57mhfK-9" value="List post by current user" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="320" y="130" width="150" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="HzKWt3v1qoBmAx57mhfK-11" value="" style="endArrow=open;endFill=1;endSize=12;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="260" y="100" as="sourcePoint" />
+            <mxPoint x="540" y="100" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HzKWt3v1qoBmAx57mhfK-12" value="" style="endArrow=open;endFill=1;endSize=12;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="260" y="430" as="sourcePoint" />
+            <mxPoint x="540" y="430" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HzKWt3v1qoBmAx57mhfK-13" value="" style="endArrow=block;dashed=1;endFill=0;endSize=12;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="540" y="450" as="sourcePoint" />
+            <mxPoint x="260" y="450" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HzKWt3v1qoBmAx57mhfK-14" value="Get comments by post id&lt;br&gt;Fields:&amp;nbsp;from,message,id,created_time" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="305" y="390" width="210" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="HzKWt3v1qoBmAx57mhfK-15" value="Comments" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="320" y="450" width="160" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="HzKWt3v1qoBmAx57mhfK-16" value="" style="endArrow=open;endFill=1;endSize=12;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="260" y="260" as="sourcePoint" />
+            <mxPoint x="540" y="260" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HzKWt3v1qoBmAx57mhfK-17" value="Get detail post&lt;br&gt;Fields:&amp;nbsp;id,message,comments,reactions,&lt;br&gt;type,full_picture,created_time" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="267.5" y="210" width="272.5" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="HzKWt3v1qoBmAx57mhfK-18" value="" style="endArrow=block;dashed=1;endFill=0;endSize=12;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="540" y="280" as="sourcePoint" />
+            <mxPoint x="260" y="280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HzKWt3v1qoBmAx57mhfK-20" value="Detail post" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="350" y="278" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="HzKWt3v1qoBmAx57mhfK-22" value="" style="endArrow=open;endFill=1;endSize=12;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="260" y="620" as="sourcePoint" />
+            <mxPoint x="540" y="620" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HzKWt3v1qoBmAx57mhfK-23" value="" style="endArrow=block;dashed=1;endFill=0;endSize=12;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="540" y="640" as="sourcePoint" />
+            <mxPoint x="260" y="640" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HzKWt3v1qoBmAx57mhfK-24" value="Get detail comment&lt;br&gt;Fields:&amp;nbsp;id,message,from,created_time" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="275" y="580" width="220" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="HzKWt3v1qoBmAx57mhfK-25" value="Detail comment" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="345" y="640" width="110" height="30" as="geometry" />
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
