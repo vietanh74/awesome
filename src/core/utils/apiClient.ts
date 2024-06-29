@@ -6,7 +6,7 @@ const setAuthorizationFn = (config: InternalAxiosRequestConfig) => {
 };
 
 export const apiClient: AxiosInstance = new BaseClient({
-  baseURL: `${'http://localhost:7000'}`,
+  baseURL: `${'https://public-api-me.onrender.com'}`,
   withActionLogout: false,
   withActionRefresh: false,
 }).create({
