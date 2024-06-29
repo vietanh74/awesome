@@ -13,7 +13,8 @@ const routes: RouteRecordRaw[] = [
   {
     path: '',
     name: RouteName.HOMEPAGE,
-    component: Homepage,
+    // component: Homepage,
+    component: () => import('@/modules/media/pages/Upload/index.vue'),
     meta: { layout: 'defaultNoHeader' },
   },
   {
