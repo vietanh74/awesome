@@ -31,12 +31,6 @@ function handleTableChange(pageData) {
       :loading="dataSource.loading"
       @change="handleTableChange"
     >
-      <template #bodyCell="{ column, record, index }">
-        <template v-if="column.scopedSlots">
-          <slot :name="column.scopedSlots" :record="record" :column="column" :index="index"></slot>
-        </template>
-      </template>
-      <template #emptyText>{{ dataSource.noDataText || 'Không có dữ liệu' }}</template>
     </Table>
   </div>
 </template>
