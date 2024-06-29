@@ -3,4 +3,5 @@ export enum RouteName {
   ABOUT = 'About',
   NOT_FOUND = 'NotFound',
   LOG_WORK = 'LogWork',
+  UPLOAD = 'Upload',
 }

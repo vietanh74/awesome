@@ -27,6 +27,7 @@ function tranformRespose(res: AxiosResponse): IResponse {
   const success = resData.code === 'SUCCESS' ? true : false;
   return {
     success,
+    error: !success,
     data: resData.payload,
     statusCode: res?.status,
     message: resData.message,
@@ -38,6 +39,7 @@ function tranformError(error: AxiosError<any, any>): IResponse {
   const resData = res?.data || {};
   return {
     success: false,
+    error: true,
     data: resData.payload,
     statusCode: res?.status || error.code,
     message: resData.message || error.message,
@@ -66,7 +68,7 @@ api.interceptors.request.use((config) => {
 });
 
 api.interceptors.response.use(
-  (response: AxiosResponse): IResponse => {
+  (response: AxiosResponse): any => {
     return tranformRespose(response);
   },
   async (error: AxiosError) => {

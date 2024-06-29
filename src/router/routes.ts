@@ -22,6 +22,12 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/modules/logWork/index.vue'),
     meta: { layout: 'defaultNoHeader' },
   },
+  {
+    path: 'media/upload',
+    name: RouteName.UPLOAD,
+    component: () => import('@/modules/media/pages/Upload/index.vue'),
+    meta: { layout: 'defaultNoHeader' },
+  },
 ];
 
 export default routes;

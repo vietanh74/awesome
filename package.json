@@ -19,8 +19,8 @@
   },
   "dependencies": {
     "@ant-design/icons-vue": "^6.1.0",
-    "ant-design-vue": "^3.2.2",
-    "axios": "^0.26.1",
+    "ant-design-vue": "^4.2.3",
+    "axios": "^1.7.2",
     "date-chinese": "^2.1.4",
     "date-fns": "^2.28.0",
     "gh-pages": "^4.0.0",
