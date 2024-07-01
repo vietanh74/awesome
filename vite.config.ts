@@ -1,47 +1,27 @@
-import { resolve } from 'path';
 import { defineConfig, loadEnv } from 'vite';
 import vue from '@vitejs/plugin-vue';
-// import copy from 'rollup-plugin-copy';
+import svgLoader from 'vite-svg-loader';
+
+import { resolve } from 'path';
 
 const ENV_PATH = './env';
-// const BUILD_PATH = 'dist';
 
 export default ({ mode }) => {
-  process.env = { ...process.env, ...loadEnv(mode, ENV_PATH) };
+  process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };
 
   return defineConfig({
-    base: process.env.VITE_APP_SUB_FOLDER ? `/${process.env.VITE_APP_SUB_FOLDER}/` : '/',
-    plugins: [
-      vue(),
-    ],
-    css: {
-      preprocessorOptions: {
-        less: {
-          modifyVars: {
-            'primary-color': '#00904a',
-          },
-          javascriptEnabled: true,
-        },
-      },
-    },
+    plugins: [vue(), svgLoader()],
     resolve: {
       alias: {
         '@': resolve(__dirname, './src'),
       },
     },
     envDir: resolve(__dirname, ENV_PATH),
+    preview: {
+      port: 3000,
+    },
     server: {
       port: parseInt(process.env.VITE_APP_PORT) || 3000,
-    },
-    build: {
-      // rollupOptions: {
-      //   plugins: [
-      //     copy({
-      //       targets: [{ src: `${BUILD_PATH}/index.html`, dest: BUILD_PATH, rename: '404.html' }],
-      //       hook: 'closeBundle',
-      //     }),
-      //   ],
-      // },
     },
   });
 };

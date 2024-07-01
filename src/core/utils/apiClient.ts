@@ -6,7 +6,7 @@ const setAuthorizationFn = (config: InternalAxiosRequestConfig) => {
 };
 
 export const apiClient: AxiosInstance = new BaseClient({
-  baseURL: `${'https://public-api-me.onrender.com'}`,
+  baseURL: `${import.meta.env.VITE_API_URL}`,
   withActionLogout: false,
   withActionRefresh: false,
 }).create({
