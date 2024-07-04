@@ -4,6 +4,7 @@ import { message } from 'ant-design-vue';
 import { IResponse } from '../interfaces';
 import { authService } from '@/services';
 import { isNotifyWhenFail, jsonDecode } from '@/utils';
+import { getAppAccessToken } from '../auth';
 
 interface ConfigInstance {
   setAuthorizationFn?: (config: InternalAxiosRequestConfig) => InternalAxiosRequestConfig;
@@ -87,7 +88,13 @@ export class BaseClient {
   }
 
   create({ setAuthorizationFn, setHeaderFn }: ConfigInstance = {}) {
-    const defaultSetAuthorizationFn = (config) => {};
+    const defaultSetAuthorizationFn = (config) => {
+      const token = getAppAccessToken();
+
+      if (token) {
+        config.headers['Authorization'] = `Bearer ${token}`;
+      }
+    };
 
     const api: AxiosInstance = axios.create({
       baseURL: this.baseURL,
