@@ -5,11 +5,12 @@ import copy from 'rollup-plugin-copy';
 
 import { resolve } from 'path';
 
-const ENV_PATH = './env';
 const BUILD_PATH = 'dist';
 
 export default ({ mode }) => {
   process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };
+
+  console.log('process.env.VITE_APP_SUB_FOLDER', process.env.VITE_APP_SUB_FOLDER);
 
   return defineConfig({
     plugins: [vue(), svgLoader()],
@@ -18,7 +19,6 @@ export default ({ mode }) => {
         '@': resolve(__dirname, './src'),
       },
     },
-    envDir: resolve(__dirname, ENV_PATH),
     preview: {
       port: 3000,
     },
