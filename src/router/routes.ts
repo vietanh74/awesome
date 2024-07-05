@@ -1,14 +1,17 @@
 import type { RouteRecordRaw } from 'vue-router';
 
 import { RouteName } from '@/shared/constants';
-import Homepage from '@/modules/homepage/index.vue';
-import NotFound from '@/modules/notFound/index.vue';
+// import Homepage from '@/modules/common/homepage/index.vue';
+import NotFound from '@/modules/common/notFound/index.vue';
 
 const routes: RouteRecordRaw[] = [
   {
     path: '/:pathMatch(.*)*',
     name: RouteName.NOT_FOUND,
     component: NotFound,
+    meta: {
+      isPublic: true,
+    },
   },
   {
     path: '',
@@ -16,6 +19,15 @@ const routes: RouteRecordRaw[] = [
     // component: Homepage,
     component: () => import('@/modules/media/pages/Upload/index.vue'),
     meta: { layout: 'defaultNoHeader' },
+  },
+  {
+    path: 'login',
+    name: RouteName.LOGIN,
+    component: () => import('@/modules/common/login/index.vue'),
+    meta: {
+      layout: 'defaultNoHeader',
+      isPublic: true,
+    },
   },
   {
     path: 'cham-cong',

@@ -7,19 +7,14 @@
     <input ref="fileInputRef" class="hidden" type="file" @change="(e) => onSelectMedia(e)" />
 
     <div class="mt-4">
-      <AInput v-model:value="formState.pass" />
-    </div>
-
-    <div class="mt-4">
       <Button type="primary" :loading="screenState.uploading" @click="submit()">Submit</Button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { message, Input as AInput, Button } from 'ant-design-vue';
+import { message, Button } from 'ant-design-vue';
 import { reactive, ref } from 'vue';
-import { toString } from 'lodash-es';
 
 import { commonService } from '@/services';
 
@@ -28,10 +23,8 @@ const screenState = reactive({
   uploading: false,
 });
 const formState = ref<{
-  pass?: string;
   file?: any;
 }>({
-  pass: '',
   file: {},
 });
 
@@ -48,7 +41,6 @@ async function onSelectMedia(e) {
 async function submit() {
   const formData = new FormData();
   formData.append('file', formState.value.file);
-  formData.append('pass', toString(formState.value.pass));
 
   screenState.uploading = true;
 

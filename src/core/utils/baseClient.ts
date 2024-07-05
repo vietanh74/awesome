@@ -4,7 +4,7 @@ import { message } from 'ant-design-vue';
 import { IResponse } from '../interfaces';
 import { authService } from '@/services';
 import { isNotifyWhenFail, jsonDecode } from '@/utils';
-import { getAppAccessToken } from '../auth';
+import { getAppAccessToken, removeAppToken } from '../auth';
 
 interface ConfigInstance {
   setAuthorizationFn?: (config: InternalAxiosRequestConfig) => InternalAxiosRequestConfig;
@@ -49,6 +49,8 @@ export class BaseClient {
   }
 
   private rejectErrorAndClearToken(error: AxiosError) {
+    removeAppToken();
+
     if (this.withActionLogout) {
       window.location.href = `/login?returnUrl=${encodeURIComponent(window.location.pathname)}`;
     }
