@@ -11,6 +11,7 @@ export default ({ mode }) => {
   process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };
 
   return defineConfig({
+    base: process.env.VITE_APP_SUB_FOLDER ? `/${process.env.VITE_APP_SUB_FOLDER}/` : '/',
     plugins: [vue(), svgLoader()],
     resolve: {
       alias: {
