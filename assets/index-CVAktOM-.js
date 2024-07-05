@@ -1,0 +1,1 @@
+import{a0 as o,aj as t,V as n,L as r,i as c}from"./index-CNMLUiXz.js";const s={},_={id:"__main"};function a(i,d){const e=t("router-view");return n(),r("div",_,[c(e)])}const f=o(s,[["render",a]]);export{f as default};

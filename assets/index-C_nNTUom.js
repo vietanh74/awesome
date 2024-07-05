@@ -1,1 +1,0 @@
-import{a0 as o,ac as t,V as n,L as c,i as r}from"./index-CUw58_MG.js";const s={},_={id:"__main"};function a(i,d){const e=t("router-view");return n(),c("div",_,[r(e)])}const f=o(s,[["render",a]]);export{f as default};
