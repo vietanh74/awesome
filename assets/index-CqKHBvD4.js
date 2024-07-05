@@ -1,0 +1,1 @@
+import{ab as o,ac as t,o as c,c as n,e as r}from"./index-Bl5wf23Z.js";const s={},_={id:"__main"};function a(i,d){const e=t("router-view");return c(),n("div",_,[r(e)])}const f=o(s,[["render",a]]);export{f as default};
