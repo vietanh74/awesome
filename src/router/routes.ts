@@ -1,7 +1,7 @@
 import type { RouteRecordRaw } from 'vue-router';
 
 import { RouteName } from '@/shared/constants';
-// import Homepage from '@/modules/common/homepage/index.vue';
+import Homepage from '@/modules/common/homepage/index.vue';
 import NotFound from '@/modules/common/notFound/index.vue';
 
 const routes: RouteRecordRaw[] = [
@@ -16,8 +16,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '',
     name: RouteName.HOMEPAGE,
-    // component: Homepage,
-    component: () => import('@/modules/media/pages/Upload/index.vue'),
+    component: Homepage,
     meta: { layout: 'defaultNoHeader' },
   },
   {
