@@ -33,17 +33,17 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/modules/logWork/index.vue'),
   },
   {
-    path: 'media-upload',
+    path: 'u',
     name: RouteName.UPLOAD,
     component: () => import('@/modules/media/pages/Upload/index.vue'),
   },
   {
-    path: 'media-preview',
+    path: 'p',
     name: RouteName.PREVIEW,
     component: () => import('@/modules/media/pages/preview/index.vue'),
   },
   {
-    path: 'media-preview/:fileId',
+    path: 'p/:fileId',
     name: RouteName.PREVIEW_DETAIL,
     component: () => import('@/modules/media/pages/previewDetail/index.vue'),
   },
