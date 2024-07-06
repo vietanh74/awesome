@@ -31,6 +31,10 @@ export default ({ mode }) => {
             targets: [{ src: `${BUILD_PATH}/index.html`, dest: BUILD_PATH, rename: '404.html' }],
             hook: 'closeBundle',
           }),
+          copy({
+            targets: [{ src: '.nojekyll', dest: BUILD_PATH, rename: '.nojekyll' }],
+            hook: 'closeBundle',
+          }),
         ],
       },
     },
