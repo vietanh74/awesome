@@ -1,0 +1,1 @@
+import{a0 as o,af as t,V as n,L as r,i as c}from"./index-BPPhTTtY.js";const s={},_={id:"__main"};function a(i,d){const e=t("router-view");return n(),r("div",_,[c(e)])}const m=o(s,[["render",a]]);export{m as default};
