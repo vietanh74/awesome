@@ -1,7 +1,6 @@
-import { AxiosInstance } from 'axios';
 import { BaseClient } from './baseClient';
 
-export const apiClient: AxiosInstance = new BaseClient({
+export const apiClient = new BaseClient({
   baseURL: `${import.meta.env.VITE_API_URL}`,
   withActionLogout: true,
   withActionRefresh: false,

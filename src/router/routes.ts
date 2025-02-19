@@ -2,6 +2,7 @@ import type { RouteRecordRaw } from 'vue-router';
 
 import { RouteName } from '@/shared/constants';
 import Homepage from '@/modules/common/homepage/index.vue';
+import ReportPage from '@/modules/common/report/index.vue';
 import NotFound from '@/modules/common/notFound/index.vue';
 
 const routes: RouteRecordRaw[] = [
@@ -17,6 +18,15 @@ const routes: RouteRecordRaw[] = [
     path: '',
     name: RouteName.HOMEPAGE,
     component: Homepage,
+  },
+  {
+    path: 'report',
+    name: RouteName.REPORT,
+    component: ReportPage,
+    meta: {
+      layout: 'defaultNoHeader',
+      isPublic: true,
+    },
   },
   {
     path: 'login',

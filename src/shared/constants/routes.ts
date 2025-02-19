@@ -1,5 +1,6 @@
 export enum RouteName {
   HOMEPAGE = 'Homepage',
+  REPORT = 'Report',
   ABOUT = 'About',
   NOT_FOUND = 'NotFound',
   LOG_WORK = 'LogWork',
