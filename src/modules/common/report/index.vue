@@ -7,7 +7,12 @@
     <div v-else>
       <table>
         <tr v-for="(item, index) in reportDatas" :key="index">
-          <td>{{ item.username }}</td>
+          <td>
+            {{ item.username }}
+            <span v-if="item.username && screenState.isShowTotalHour" class="text-red-600">
+              {{ `- ${item.totalHour}` }}
+            </span>
+          </td>
           <td>{{ item.name }}</td>
           <td>{{ item.totalEstimateHour }}</td>
         </tr>
@@ -17,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import { forOwn, get, mapValues, reduce } from 'lodash-es';
+import { forOwn, get, mapValues, reduce, sortBy, toLower } from 'lodash-es';
 import { onMounted, reactive, ref } from 'vue';
 import { Spin } from 'ant-design-vue';
 
@@ -26,6 +31,7 @@ import { jiraService } from '@/services';
 const reportDatas = ref<any[]>([]);
 const screenState = reactive({
   isLoading: false,
+  isShowTotalHour: true,
 });
 
 onMounted(() => {
@@ -33,7 +39,7 @@ onMounted(() => {
 });
 
 async function getIssues() {
-  const assignee = 'gamdth1,huongcm,anhhd55,thanhdh25,thanhtt151,anhhv71,truonghd10';
+  const assignee = 'gamdth1,huongcm,anhhd55,thanhdh25,thanhtt151,anhhv71,truonghd10,anhtv56';
   const jql = `("Start date (WBSGantt)" >= startOfWeek(1d) AND due <= endOfWeek(1d) OR "Start date (WBSGantt)" is EMPTY OR due is EMPTY) AND project = "Customer Services" AND issueFunction not in hasSubtasks() AND status not in (Cancelled, Pending) AND Sprint in openSprints() AND Sprint in openSprints() AND assignee in (${assignee})`;
 
   screenState.isLoading = true;
@@ -59,11 +65,13 @@ async function getIssues() {
           items: [item],
           username: get(item, 'fields.assignee.displayName'),
           userKey: assigneeKey,
+          totalHour: getTotalTime(item),
         };
         return val;
       }
 
       val[assigneeKey].items.push(item);
+      val[assigneeKey].totalHour += getTotalTime(item);
       return val;
     },
     {}
@@ -83,6 +91,8 @@ function mapDataToTableContent(assigneeIssue) {
     return {
       ...item,
       username: index === 0 ? assigneeIssue.username : '',
+      userKey: assigneeIssue.userKey,
+      totalHour: assigneeIssue.totalHour,
     };
   });
 }
@@ -93,7 +103,8 @@ function convertToReports(subTasks: any[]) {
   const groupedIssues = reduce(
     subTasks,
     (val, item) => {
-      const parentKey = get(item, 'fields.parent.key');
+      const isSubTaskSupport = toLower(get(item, 'fields.parent.fields.summary')).includes('support');
+      const parentKey = isSubTaskSupport ? 'support' : get(item, 'fields.parent.key');
 
       if (!parentKey) {
         return val;
@@ -105,14 +116,14 @@ function convertToReports(subTasks: any[]) {
         }
 
         val[parentKey] = {
-          totalEstimate: timeToHour(item.fields.timeestimate),
-          name: get(item, 'fields.parent.fields.summary'),
+          totalEstimate: getTotalTime(item),
+          name: isSubTaskSupport ? 'Task support' : get(item, 'fields.parent.fields.summary'),
           key: parentKey,
         };
         return val;
       }
 
-      val[parentKey].totalEstimate += timeToHour(item.fields.timeestimate);
+      val[parentKey].totalEstimate += getTotalTime(item);
       return val;
     },
     {}
@@ -125,7 +136,20 @@ function convertToReports(subTasks: any[]) {
     });
   });
 
-  return returnValues;
+  // Để task support xuống cuối
+  const sortedValues = sortBy(returnValues, (item) => {
+    if (item.key === 'support') {
+      return 1;
+    }
+
+    return 0;
+  });
+
+  return sortedValues;
+}
+
+function getTotalTime(item) {
+  return timeToHour(item.fields.timeestimate);
 }
 
 function timeToHour(val: number) {
