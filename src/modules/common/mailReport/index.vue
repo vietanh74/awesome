@@ -57,7 +57,7 @@ async function getIssues() {
     .finally(() => (screenState.isLoading = false));
 
   const issues: any[] = data.issues;
-  // console.log('issues', issues);
+  console.log('issues', issues);
   const convertedDoneTasks: any[] = [];
   const convertedInProgressTasks: any[] = [];
 
@@ -74,9 +74,6 @@ async function getIssues() {
 
   doneTasks.value = convertedDoneTasks;
   inProgressTasks.value = convertedInProgressTasks;
-
-  console.log('convertedDoneTasks', convertedDoneTasks);
-  console.log('convertedInProgressTasks', convertedInProgressTasks);
 }
 
 function getFields(task) {
