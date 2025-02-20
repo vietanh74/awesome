@@ -202,7 +202,7 @@ export class BaseClient {
         this.processQueue(null, res.data?.access_token);
 
         return Promise.resolve(api(originalRequest));
-      }
+      },
     );
 
     return api;

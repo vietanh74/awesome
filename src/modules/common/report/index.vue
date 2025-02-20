@@ -75,7 +75,7 @@ async function getIssues() {
       val[assigneeKey].totalHour += getTotalTime(item);
       return val;
     },
-    {}
+    {},
   );
 
   forOwn(assigneeIssues, (value: any) => {
@@ -127,7 +127,7 @@ function convertToReports(subTasks: any[]) {
       val[parentKey].totalEstimate += getTotalTime(item);
       return val;
     },
-    {}
+    {},
   );
 
   mapValues(groupedIssues, (val: any) => {

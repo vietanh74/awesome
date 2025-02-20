@@ -19,7 +19,7 @@ watch(
       layoutComponent.value = markRaw(DefaultLayout);
     }
   },
-  { flush: 'pre', immediate: true }
+  { flush: 'pre', immediate: true },
 );
 </script>
 
