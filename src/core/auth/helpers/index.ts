@@ -3,7 +3,7 @@ import { includes } from 'lodash';
 
 import { RouteName } from '@/shared/constants';
 
-export const APP_ACCESS_TOKEN = 'app_access_token';
+export const APP_ACCESS_TOKEN = 'awsome_access_token';
 export const APP_REFRESH_TOKEN = 'app_refresh_token';
 
 export function getAppAccessToken(): string | null {
