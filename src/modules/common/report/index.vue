@@ -9,7 +9,7 @@
         <tr v-for="(item, index) in reportDatas" :key="index">
           <td>
             {{ item.username }}
-            <span v-if="item.username && screenState.isShowTotalHour" class="text-red-600">
+            <span v-if="item.username && route.query.hasTotal" class="text-red-600">
               {{ `- ${item.totalHour}` }}
             </span>
           </td>
@@ -22,16 +22,17 @@
 </template>
 
 <script setup lang="ts">
-import { forOwn, get, mapValues, reduce, sortBy, toLower } from 'lodash-es';
+import { forOwn, get, mapValues, reduce, round, sortBy, toLower } from 'lodash-es';
 import { onMounted, reactive, ref } from 'vue';
 import { Spin } from 'ant-design-vue';
+import { useRoute } from 'vue-router';
 
 import { jiraService } from '@/services';
 
+const route = useRoute();
 const reportDatas = ref<any[]>([]);
 const screenState = reactive({
   isLoading: false,
-  isShowTotalHour: true,
 });
 
 onMounted(() => {
@@ -92,7 +93,7 @@ function mapDataToTableContent(assigneeIssue) {
       ...item,
       username: index === 0 ? assigneeIssue.username : '',
       userKey: assigneeIssue.userKey,
-      totalHour: assigneeIssue.totalHour,
+      totalHour: round(assigneeIssue.totalHour, 2),
     };
   });
 }
@@ -149,15 +150,13 @@ function convertToReports(subTasks: any[]) {
 }
 
 function getTotalTime(item) {
-  return timeToHour(item.fields.timeestimate);
-}
+  const val = item.fields.timeestimate;
 
-function timeToHour(val: number) {
   if (!val) {
     return 0;
   }
 
-  return val / 60 / 60;
+  return round(val / 60 / 60, 2);
 }
 </script>
 
