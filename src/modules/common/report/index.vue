@@ -118,7 +118,7 @@ function convertToReports(subTasks: any[]) {
 
         val[parentKey] = {
           totalEstimate: getTotalTime(item),
-          name: isSubTaskSupport ? 'Task support' : get(item, 'fields.parent.fields.summary'),
+          name: isSubTaskSupport ? 'Task planing, support' : get(item, 'fields.parent.fields.summary'),
           key: parentKey,
         };
         return val;
