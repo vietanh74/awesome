@@ -95,7 +95,7 @@ function getTaskNote(task) {
   const taskStatus = get(task, 'fields.status.name');
 
   if (isDoneTask(task)) {
-    return 'Ready';
+    return taskStatus;
   }
 
   if (taskStatus === 'UAT') {
