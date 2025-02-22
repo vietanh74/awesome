@@ -5,7 +5,7 @@
     </div>
 
     <div v-else>
-      <div>1. Công việc đã hoàn thành:</div>
+      <!-- <div>1. Công việc đã hoàn thành:</div>
       <div v-for="(item, index) in doneTasks" :key="index">
         {{ item.key }}&nbsp;&nbsp;&nbsp;{{ item.summary }}
         <span v-if="route.query.hasStatus" class="text-green-700">- &nbsp;&nbsp;&nbsp;{{ item.status }}</span>
@@ -20,7 +20,16 @@
       <br />
 
       <div>* Vấn đề tồn đọng:</div>
-      <div>N/A</div>
+      <div>N/A</div> -->
+
+      <table>
+        <tr v-for="(item, index) in reportTasks" :key="index">
+          <td>
+            {{ item.summary }}
+          </td>
+          <td>{{ item.note }}</td>
+        </tr>
+      </table>
     </div>
   </div>
 </template>
@@ -28,14 +37,11 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue';
 import { Spin } from 'ant-design-vue';
-import { forEach, get } from 'lodash-es';
-import { useRoute } from 'vue-router';
+import { get, includes, map } from 'lodash-es';
 
 import { jiraService } from '@/services';
 
-const route = useRoute();
-const doneTasks = ref<any[]>([]);
-const inProgressTasks = ref<any[]>([]);
+const reportTasks = ref<any[]>([]);
 const screenState = reactive({
   isLoading: false,
 });
@@ -58,22 +64,22 @@ async function getIssues() {
 
   const issues: any[] = data.issues;
   console.log('issues', issues);
-  const convertedDoneTasks: any[] = [];
-  const convertedInProgressTasks: any[] = [];
+  // const convertedDoneTasks: any[] = [];
+  // const convertedInProgressTasks: any[] = [];
+  const convertedReportTasks = map(issues, (item) => getFields(item));
+  reportTasks.value = convertedReportTasks;
 
-  forEach(issues, (item) => {
-    const taskStatus = get(item, 'fields.status.name');
+  // forEach(issues, (item) => {
+  //   if (isDoneTask(item)) {
+  //     convertedDoneTasks.push(getFields(item));
+  //     return;
+  //   }
 
-    if (['Ready Onproduction', 'On-Production', 'Closed'].includes(taskStatus)) {
-      convertedDoneTasks.push(getFields(item));
-      return;
-    }
+  //   convertedInProgressTasks.push(getFields(item));
+  // });
 
-    convertedInProgressTasks.push(getFields(item));
-  });
-
-  doneTasks.value = convertedDoneTasks;
-  inProgressTasks.value = convertedInProgressTasks;
+  // doneTasks.value = convertedDoneTasks;
+  // inProgressTasks.value = convertedInProgressTasks;
 }
 
 function getFields(task) {
@@ -81,7 +87,58 @@ function getFields(task) {
     summary: task.fields.summary,
     key: task.key,
     status: get(task, 'fields.status.name'),
+    note: getTaskNote(task),
   };
+}
+
+function getTaskNote(task) {
+  const taskStatus = get(task, 'fields.status.name');
+
+  if (isDoneTask(task)) {
+    return 'Ready';
+  }
+
+  if (taskStatus === 'UAT') {
+    return 'Đã test xong, chờ UAT';
+  }
+
+  if (taskStatus === 'In Progress') {
+    return 'Đang xử lý';
+  }
+
+  if (taskStatus === 'Testing') {
+    if (isBeginTest(task)) {
+      return 'Đang test';
+    }
+
+    return 'Hoàn thành dev, chưa test';
+  }
+}
+
+function isDoneTask(task) {
+  const taskStatus = get(task, 'fields.status.name');
+
+  if (['Ready Onproduction', 'On-Production', 'Closed'].includes(taskStatus)) {
+    return true;
+  }
+
+  return false;
+}
+
+function isBeginTest(task) {
+  const subTasks = get(task, 'fields.subtasks');
+
+  for (const item of subTasks) {
+    if (!includes(item.fields.summary, '[TEST]')) {
+      continue;
+    }
+
+    if (get(item, 'fields.status.name') !== 'Todo') {
+      return true;
+    }
+  }
+
+  return false;
 }
 </script>
 
