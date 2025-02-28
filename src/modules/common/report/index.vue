@@ -14,7 +14,7 @@
             </span>
           </td>
           <td>{{ item.name }}</td>
-          <td>{{ item.totalEstimateHour }}</td>
+          <td>{{ item.totalEstimate }}</td>
         </tr>
       </table>
     </div>
@@ -150,7 +150,7 @@ function convertToReports(subTasks: any[]) {
 }
 
 function getTotalTime(item) {
-  const val = item.fields.timeestimate;
+  const val = item.fields.timeoriginalestimate;
 
   if (!val) {
     return 0;
