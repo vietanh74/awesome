@@ -52,7 +52,7 @@ onMounted(() => {
 
 async function getIssues() {
   const jql =
-    'labels = FE-Team AND Sprint in (3515) AND issuetype not in (Bug, Sub-task, "Bug UAT") ORDER BY "Finish date (WBSGantt)" ASC, updated DESC';
+    'labels = FE-Team AND Sprint in (3545) AND issuetype not in (Bug, Sub-task, "Bug UAT") ORDER BY "Finish date (WBSGantt)" ASC, updated DESC';
 
   screenState.isLoading = true;
   const { data } = await jiraService
