@@ -13,8 +13,8 @@
               {{ `- ${item.totalHour}` }}
             </span>
           </td>
-          <td>{{ item.name }}</td>
-          <td>{{ item.totalEstimate }}</td>
+          <td :class="{ 'text-red-600': item.type === ReportDataType.DAY_OFF }">{{ item.name }}</td>
+          <td :class="{ 'text-red-600': item.type === ReportDataType.DAY_OFF }">{{ item.totalEstimate }}</td>
         </tr>
       </table>
     </div>
@@ -29,11 +29,21 @@ import { useRoute } from 'vue-router';
 
 import { jiraService } from '@/services';
 
+enum ReportDataType {
+  NORMAL = 'normal',
+  DAY_OFF = 'dayOff',
+}
+
 const route = useRoute();
 const reportDatas = ref<any[]>([]);
 const screenState = reactive({
   isLoading: false,
 });
+const dayOffConfigs = [
+  { user: 'thanhtt151', day: '3/3', effort: 7 },
+  { user: 'gamdth1', day: '8/3', effort: 7 },
+  //
+];
 
 onMounted(() => {
   getIssues();
@@ -78,8 +88,8 @@ async function getIssues() {
     {},
   );
 
-  forOwn(assigneeIssues, (value: any) => {
-    convertedValues = convertedValues.concat(mapDataToTableContent(value));
+  forOwn(assigneeIssues, (value: any, key) => {
+    convertedValues = convertedValues.concat(mapDataToTableContent(value, key));
   });
 
   console.log('convertedValues', convertedValues);
@@ -87,8 +97,8 @@ async function getIssues() {
   reportDatas.value = convertedValues;
 }
 
-function mapDataToTableContent(assigneeIssue) {
-  return convertToReports(assigneeIssue.items).map((item, index) => {
+function mapDataToTableContent(assigneeIssue, username: string) {
+  const reports = convertToReports(assigneeIssue.items).map((item, index) => {
     return {
       ...item,
       username: index === 0 ? assigneeIssue.username : '',
@@ -96,6 +106,10 @@ function mapDataToTableContent(assigneeIssue) {
       totalHour: round(assigneeIssue.totalHour, 2),
     };
   });
+
+  const dayOffReports = mapDayOffByUserToRecords(username);
+
+  return reports.concat(dayOffReports);
 }
 
 function convertToReports(subTasks: any[]) {
@@ -117,6 +131,7 @@ function convertToReports(subTasks: any[]) {
         }
 
         val[parentKey] = {
+          type: ReportDataType.NORMAL,
           totalEstimate: getTotalTime(item),
           name: isSubTaskSupport ? 'Task planing, support' : get(item, 'fields.parent.fields.summary'),
           key: parentKey,
@@ -147,6 +162,18 @@ function convertToReports(subTasks: any[]) {
   });
 
   return sortedValues;
+}
+
+function mapDayOffByUserToRecords(username: string) {
+  return dayOffConfigs
+    .filter((item) => item.user === username)
+    .map((item) => ({
+      type: ReportDataType.DAY_OFF,
+      totalEstimate: item.effort,
+      totalEstimateHour: `${item.effort}h`,
+      name: `Nghỉ ngày ${item.day}`,
+      key: null,
+    }));
 }
 
 function getTotalTime(item) {
