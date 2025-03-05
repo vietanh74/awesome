@@ -42,6 +42,7 @@ const screenState = reactive({
 const dayOffConfigs = [
   { user: 'thanhtt151', day: '3/3', effort: 7 },
   { user: 'gamdth1', day: '8/3', effort: 7 },
+  { user: 'anhhd55', day: '8/3', effort: 7 },
   //
 ];
 
