@@ -9,12 +9,19 @@
         <tr v-for="(item, index) in reportDatas" :key="index">
           <td>
             {{ item.username }}
-            <span v-if="item.username && route.query.hasTotal" class="text-red-600">
+            <!-- <span v-if="item.username && route.query.hasTotal" class="text-red-600">
               {{ `- ${item.totalHour}` }}
-            </span>
+            </span> -->
+          </td>
+          <td>
+            <a v-if="item.key" :href="`https://jira.ghtklab.com/browse/${item.key}`">{{ item.key }}</a>
           </td>
           <td :class="{ 'text-red-600': item.type === ReportDataType.DAY_OFF }">{{ item.name }}</td>
           <td :class="{ 'text-red-600': item.type === ReportDataType.DAY_OFF }">{{ item.totalEstimate }}</td>
+          <td></td>
+          <td>{{ item.weekTotalHour }}</td>
+          <td>{{ item.totalHour }}</td>
+          <td>{{ item.totalOff }}</td>
         </tr>
       </table>
     </div>
@@ -40,9 +47,11 @@ const screenState = reactive({
   isLoading: false,
 });
 const dayOffConfigs = [
-  { user: 'thanhtt151', day: '3/3', effort: 7 },
-  { user: 'gamdth1', day: '8/3', effort: 7 },
-  { user: 'anhhd55', day: '8/3', effort: 7 },
+  { user: 'thanhtt151', day: 'ngày 3/3', effort: 7 },
+  { user: 'gamdth1', day: 'ngày 8/3', effort: 7 },
+  { user: 'anhhd55', day: 'ngày 8/3', effort: 7 },
+  { user: 'anhtv56', day: 'nửa ngày 7/3', effort: 3.5 },
+  { user: 'huongcm', day: 'nửa ngày 8/3', effort: 3.5 },
   //
 ];
 
@@ -99,18 +108,20 @@ async function getIssues() {
 }
 
 function mapDataToTableContent(assigneeIssue, username: string) {
+  const dayOffReports = mapDayOffByUserToRecords(username);
+
   const reports = convertToReports(assigneeIssue.items).map((item, index) => {
     return {
       ...item,
-      username: index === 0 ? assigneeIssue.username : '',
+      username: index === 0 ? assigneeIssue.userKey : '',
       userKey: assigneeIssue.userKey,
-      totalHour: round(assigneeIssue.totalHour, 2),
+      weekTotalHour: index === 0 ? round(assigneeIssue.totalHour, 2) + dayOffReports.totalOff : '',
+      totalHour: index === 0 ? round(assigneeIssue.totalHour, 2) : '',
+      totalOff: index === 0 ? dayOffReports.totalOff : '',
     };
   });
 
-  const dayOffReports = mapDayOffByUserToRecords(username);
-
-  return reports.concat(dayOffReports);
+  return reports.concat(dayOffReports.items);
 }
 
 function convertToReports(subTasks: any[]) {
@@ -166,15 +177,23 @@ function convertToReports(subTasks: any[]) {
 }
 
 function mapDayOffByUserToRecords(username: string) {
-  return dayOffConfigs
-    .filter((item) => item.user === username)
-    .map((item) => ({
+  const dayOffItems = dayOffConfigs.filter((item) => item.user === username);
+  const totalOff = dayOffItems.reduce((val, item) => {
+    const count = val + item.effort;
+
+    return count;
+  }, 0);
+
+  return {
+    items: dayOffItems.map((item) => ({
       type: ReportDataType.DAY_OFF,
       totalEstimate: item.effort,
       totalEstimateHour: `${item.effort}h`,
-      name: `Nghỉ ngày ${item.day}`,
+      name: `Nghỉ ${item.day}`,
       key: null,
-    }));
+    })),
+    totalOff,
+  };
 }
 
 function getTotalTime(item) {
