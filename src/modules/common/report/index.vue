@@ -14,14 +14,20 @@
             </span> -->
           </td>
           <td>
-            <a v-if="item.key" :href="`https://jira.ghtklab.com/browse/${item.key}`">{{ item.key }}</a>
+            <a
+              v-if="item.key && item.key !== 'support'"
+              :href="`https://jira.ghtklab.com/browse/${item.key}`"
+              >{{ item.key }}</a
+            >
           </td>
           <td :class="{ 'text-red-600': item.type === ReportDataType.DAY_OFF }">{{ item.name }}</td>
-          <td :class="{ 'text-red-600': item.type === ReportDataType.DAY_OFF }">{{ item.totalEstimate }}</td>
+          <td :class="{ 'text-red-600': item.type === ReportDataType.DAY_OFF }">
+            {{ formatNumber(item.totalEstimate) }}
+          </td>
           <td></td>
-          <td>{{ item.weekTotalHour }}</td>
-          <td>{{ item.totalHour }}</td>
-          <td>{{ item.totalOff }}</td>
+          <td>{{ formatNumber(item.weekTotalHour) }}</td>
+          <td>{{ formatNumber(item.totalHour) }}</td>
+          <td>{{ formatNumber(item.totalOff) }}</td>
         </tr>
       </table>
     </div>
@@ -29,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-import { forOwn, get, mapValues, reduce, round, sortBy, toLower } from 'lodash-es';
+import { forOwn, get, isNumber, mapValues, reduce, round, sortBy, toLower, toString } from 'lodash-es';
 import { onMounted, reactive, ref } from 'vue';
 import { Spin } from 'ant-design-vue';
 import { useRoute } from 'vue-router';
@@ -204,6 +210,14 @@ function getTotalTime(item) {
   }
 
   return round(val / 60 / 60, 2);
+}
+
+function formatNumber(val: number) {
+  if (!isNumber(val)) {
+    return '';
+  }
+
+  return val.toLocaleString('vi-VN');
 }
 </script>
 
