@@ -35,10 +35,9 @@
 </template>
 
 <script setup lang="ts">
-import { forOwn, get, isNumber, mapValues, reduce, round, sortBy, toLower, toString } from 'lodash-es';
+import { forOwn, get, isNumber, mapValues, reduce, round, sortBy, toLower } from 'lodash-es';
 import { onMounted, reactive, ref } from 'vue';
 import { Spin } from 'ant-design-vue';
-import { useRoute } from 'vue-router';
 
 import { jiraService } from '@/services';
 
@@ -47,17 +46,17 @@ enum ReportDataType {
   DAY_OFF = 'dayOff',
 }
 
-const route = useRoute();
 const reportDatas = ref<any[]>([]);
 const screenState = reactive({
   isLoading: false,
 });
 const dayOffConfigs = [
-  { user: 'thanhtt151', day: 'ngày 3/3', effort: 7 },
-  { user: 'gamdth1', day: 'ngày 8/3', effort: 7 },
-  { user: 'anhhd55', day: 'ngày 8/3', effort: 7 },
-  { user: 'anhtv56', day: 'nửa ngày 7/3', effort: 3.5 },
-  { user: 'huongcm', day: 'nửa ngày 8/3', effort: 3.5 },
+  // { user: 'thanhtt151', day: 'ngày 3/3', effort: 7 },
+  // { user: 'gamdth1', day: 'ngày 8/3', effort: 7 },
+  // { user: 'anhhd55', day: 'ngày 8/3', effort: 7 },
+  // { user: 'anhtv56', day: 'nửa ngày 7/3', effort: 3.5 },
+  { user: 'huongcm', day: 'nửa ngày 14/3', effort: 3.5 },
+  { user: 'thanhdh25', day: 'nửa ngày 14/3', effort: 3.5 },
   //
 ];
 
@@ -66,6 +65,7 @@ onMounted(() => {
 });
 
 async function getIssues() {
+  // const assignee = 'linhhv22,vinhtq,tampv,quangnn83';
   const assignee = 'gamdth1,huongcm,anhhd55,thanhdh25,thanhtt151,anhhv71,truonghd10,anhtv56';
   const jql = `("Start date (WBSGantt)" >= startOfWeek(1d) AND due <= endOfWeek(1d) OR "Start date (WBSGantt)" is EMPTY OR due is EMPTY) AND project = "Customer Services" AND issueFunction not in hasSubtasks() AND status not in (Cancelled, Pending) AND Sprint in openSprints() AND Sprint in openSprints() AND assignee in (${assignee})`;
 
