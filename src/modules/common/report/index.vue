@@ -51,12 +51,8 @@ const screenState = reactive({
   isLoading: false,
 });
 const dayOffConfigs = [
-  // { user: 'thanhtt151', day: 'ngày 3/3', effort: 7 },
-  // { user: 'gamdth1', day: 'ngày 8/3', effort: 7 },
-  // { user: 'anhhd55', day: 'ngày 8/3', effort: 7 },
-  // { user: 'anhtv56', day: 'nửa ngày 7/3', effort: 3.5 },
-  { user: 'huongcm', day: 'nửa ngày 14/3', effort: 3.5 },
-  { user: 'thanhdh25', day: 'nửa ngày 14/3', effort: 3.5 },
+  { user: 'gamdth1', day: 'ngày 05/04', effort: 7 },
+  { user: 'anhhd55', day: 'ngày 31/03', effort: 7 },
   //
 ];
 
@@ -73,7 +69,7 @@ async function getIssues() {
   const { data } = await jiraService
     .searchIssues({
       jql,
-      maxResults: 100,
+      maxResults: 200,
     })
     .finally(() => (screenState.isLoading = false));
 
