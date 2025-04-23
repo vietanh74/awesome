@@ -8,7 +8,7 @@
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist -t true",
+    "deploy": "gh-pages -d dist",
     "types-check": "vue-tsc --noEmit",
     "lint:script": "eslint -c .eslintrc.js \"./src/**/*.{js,ts,vue}\" --ignore-path .gitignore .",
     "lint:prettier": "prettier --check \"src/**/*+(js|ts|vue|scss)\"",
