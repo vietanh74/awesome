@@ -14,11 +14,20 @@
           :xs="{ span: 12 }"
         >
           <!-- @click="goDetail(item)" -->
-          <div class="truncate mb-1">{{ item.name }}</div>
+          <div class="p-1 border border-solid border-violet-200 rounded overflow-hidden">
+            <div class="truncate mb-1">{{ item.name }}</div>
 
-          <video class="w-full" controls preload="none">
-            <source :src="item.url" type="video/mp4" />
-          </video>
+            <div v-if="!item.isStarted" class="cursor-pointer" @click="startVideo(item)">
+              <ImageOrDefault :src="item.previewImage" class="w-full h-auto">
+                <img src="/defaultPreview.jpg" class="w-full h-auto" @click="startVideo(item)" />
+              </ImageOrDefault>
+            </div>
+
+            <!-- preload="none" -->
+            <video v-else class="w-full" controls>
+              <source :src="item.url" type="video/mp4" />
+            </video>
+          </div>
         </Col>
       </Row>
     </div>
@@ -29,10 +38,11 @@
 import { onMounted, reactive, ref } from 'vue';
 import { Spin, Col, Row } from 'ant-design-vue';
 import { useRouter } from 'vue-router';
+import { map } from 'lodash-es';
 
 import { commonService } from '@/services';
 import { RouteName } from '@/shared/constants';
-import { map } from 'lodash-es';
+import { ImageOrDefault } from '@/components';
 
 const router = useRouter();
 const screenState = reactive({
@@ -59,6 +69,10 @@ async function getList() {
     ...item,
     name: item.name.replace('tests/', '').replace('.mp4', ''),
   }));
+}
+
+function startVideo(mediaItem) {
+  mediaItem.isStarted = true;
 }
 
 function goDetail(mediaFile) {
