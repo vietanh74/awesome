@@ -1,0 +1,1 @@
+import{_ as o,bc as t,p as n,z as c,s as r}from"./index-CWZE63BC.js";const s={},_={id:"__main"};function a(i,d){const e=t("router-view");return c(),n("div",_,[r(e)])}const p=o(s,[["render",a]]);export{p as default};
