@@ -18,8 +18,13 @@
             <div class="truncate mb-1">{{ item.name }}</div>
 
             <div v-if="!item.isStarted" class="cursor-pointer" @click="startVideo(item)">
-              <ImageOrDefault :src="item.previewImage" class="w-full h-auto">
-                <img src="/defaultPreview.jpg" class="w-full h-auto" @click="startVideo(item)" />
+              <ImageOrDefault :src="item.previewImage" class="w-full h-auto min-h-36" loading="lazy">
+                <img
+                  src="/defaultPreview.jpg"
+                  class="w-full h-auto min-h-36"
+                  loading="lazy"
+                  @click="startVideo(item)"
+                />
               </ImageOrDefault>
             </div>
 
@@ -75,6 +80,7 @@ function startVideo(mediaItem) {
   mediaItem.isStarted = true;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function goDetail(mediaFile) {
   router.push({ name: RouteName.PREVIEW_DETAIL, params: { fileId: mediaFile.id } });
 }
