@@ -6,6 +6,7 @@ export enum RouteName {
   NOT_FOUND = 'NotFound',
   LOG_WORK = 'LogWork',
   UPLOAD = 'Upload',
+  UPLOAD_IMAGE = 'UploadImage',
   PREVIEW = 'Preview',
   PREVIEW_DETAIL = 'PreviewDeail',
   LOGIN = 'Login',

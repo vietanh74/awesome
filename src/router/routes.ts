@@ -50,6 +50,11 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/modules/media/pages/Upload/index.vue'),
   },
   {
+    path: 'u2',
+    name: RouteName.UPLOAD_IMAGE,
+    component: () => import('@/modules/media/pages/UploadImage/index.vue'),
+  },
+  {
     path: 'p',
     name: RouteName.PREVIEW,
     component: () => import('@/modules/media/pages/preview/index.vue'),
