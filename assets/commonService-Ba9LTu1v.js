@@ -1,1 +1,0 @@
-import{aH as e}from"./index-BZFhmOoX.js";class t{async uploadFile(a){return await e.post("upload",a)}async login(a){return await e.post("login",a)}async getFiles(){return await e.get("medias")}async fileDetail(a){return await e.post("media-detail",{fileId:a})}}const o=new t;export{o as c};

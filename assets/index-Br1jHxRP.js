@@ -1,1 +1,0 @@
-import{ak as o,aI as t,a2 as n,ab as r,B as a}from"./index-BZFhmOoX.js";const c={},s={id:"__main"};function _(i,d){const e=t("router-view");return r(),n("div",s,[a(e)])}const f=o(c,[["render",_]]);export{f as default};
