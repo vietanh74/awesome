@@ -15,7 +15,7 @@
         >
           <!-- @click="goDetail(item)" -->
           <div class="p-1 border border-solid border-violet-200 rounded overflow-hidden">
-            <div class="mb-1 inline-flex">
+            <div class="mb-1 inline-flex break-all">
               <div>{{ item.name }}</div>
               <div class="ml-3 cursor-pointer select-none" @click="copyName(item)">
                 <CopyOutlined />

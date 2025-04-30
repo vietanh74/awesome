@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "homepage": "https://vietanh74.github.io/awesome",
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
@@ -10,7 +11,7 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
     "types-check": "vue-tsc --noEmit",
-    "lint:script": "eslint -c .eslintrc.js \"./src/**/*.{js,ts,vue}\" --ignore-path .gitignore .",
+    "lint:script": "eslint -c .eslintrc.cjs \"./src/**/*.{js,ts,vue}\" --ignore-path .gitignore .",
     "lint:prettier": "prettier --check \"src/**/*+(js|ts|vue|scss)\"",
     "lint:style": "stylelint src/**/*.{css,scss}",
     "lint": "npm run lint:script && npm run lint:prettier && npm run lint:style",
