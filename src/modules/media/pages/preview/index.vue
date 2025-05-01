@@ -31,7 +31,7 @@
               </div>
             </div>
 
-            <div v-if="!item.isStarted" class="cursor-pointer" @click="startVideo(item)">
+            <div v-if="!isMediaItemStarted(item)" class="cursor-pointer" @click="startVideo(item)">
               <ImageOrDefault :src="item.previewImage" class="w-full h-auto" loading="lazy">
                 <img
                   src="/defaultPreview.jpg"
@@ -135,8 +135,24 @@ async function getList() {
   }));
 }
 
+function isMediaItemStarted(mediaItem) {
+  const findedMediaItem = mediaFiles.value.find((item) => item.id === mediaItem.id);
+
+  if (!findedMediaItem) {
+    return false;
+  }
+
+  return findedMediaItem.isStarted;
+}
+
 function startVideo(mediaItem) {
-  mediaItem.isStarted = true;
+  const findedMediaItem = mediaFiles.value.find((item) => item.id === mediaItem.id);
+
+  if (!findedMediaItem) {
+    return false;
+  }
+
+  findedMediaItem.isStarted = true;
 }
 
 async function copyName(mediaItem) {
