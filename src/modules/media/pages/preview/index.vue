@@ -7,14 +7,19 @@
     <div v-else>
       <Row :gutter="[16, 16]">
         <Col
-          v-for="(item, index) in mediaFiles"
-          :key="index"
-          :lg="{ span: 6 }"
-          :md="{ span: 8 }"
-          :xs="{ span: 12 }"
+          v-for="(galleryItem, galleryIndex) in galleryMediaFiles"
+          :key="galleryIndex"
+          :span="24 / colSize"
         >
+          <!-- :lg="{ span: 6 }"
+          :md="{ span: 8 }"
+          :xs="{ span: 12 }" -->
           <!-- @click="goDetail(item)" -->
-          <div class="p-1 border border-solid border-violet-200 rounded overflow-hidden">
+          <div
+            v-for="(item, index) in galleryItem"
+            :key="index"
+            class="p-1 mb-4 border border-solid border-violet-200 rounded overflow-hidden"
+          >
             <div class="mb-1 inline-flex break-all">
               <div>{{ item.name }}</div>
               <div class="ml-3 cursor-pointer select-none" @click="copyName(item)">
@@ -49,16 +54,18 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref } from 'vue';
+import { computed, onMounted, reactive, ref } from 'vue';
 import { Spin, Col, Row, message } from 'ant-design-vue';
 import { useRouter } from 'vue-router';
-import { map } from 'lodash-es';
+import { cloneDeep, map, size, take, takeRight } from 'lodash-es';
 import { CopyOutlined, SendOutlined } from '@ant-design/icons-vue';
-import { useClipboard } from '@vueuse/core';
+import { useClipboard, breakpointsTailwind, useBreakpoints } from '@vueuse/core';
 
 import { commonService } from '@/services';
 import { RouteName } from '@/shared/constants';
 import { ImageOrDefault } from '@/components';
+
+type ColSize = 2 | 3 | 4;
 
 const router = useRouter();
 const screenState = reactive({
@@ -66,6 +73,46 @@ const screenState = reactive({
 });
 const mediaFiles = ref<any[]>([]);
 const { copy } = useClipboard();
+const breakpoints = useBreakpoints(breakpointsTailwind);
+
+const colSize = computed<ColSize>(() => {
+  if (breakpoints.lg.value) {
+    return 4;
+  }
+
+  if (breakpoints.md.value) {
+    return 3;
+  }
+
+  return 2;
+});
+
+const galleryMediaFiles = computed(() => {
+  const results: any[] = [];
+  let clonedMediaFiles = cloneDeep(mediaFiles.value);
+  const mediaFilesCount = size(mediaFiles.value);
+
+  if (mediaFilesCount === 0) {
+    return [];
+  }
+
+  const perColItemSize = Math.trunc(mediaFilesCount / colSize.value);
+
+  for (let i = 1; i <= colSize.value; i++) {
+    if (i === colSize.value) {
+      const items = clonedMediaFiles;
+      results.push(items);
+      continue;
+    }
+
+    const tempMediaClount = size(clonedMediaFiles);
+    const items = take(clonedMediaFiles, perColItemSize);
+    results.push(items);
+    clonedMediaFiles = takeRight(clonedMediaFiles, tempMediaClount - perColItemSize);
+  }
+
+  return results;
+});
 
 onMounted(() => {
   getList();
