@@ -80,10 +80,6 @@ const colSize = computed<ColSize>(() => {
     return 4;
   }
 
-  if (breakpoints.md.value) {
-    return 3;
-  }
-
   return 2;
 });
 
