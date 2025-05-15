@@ -11,11 +11,14 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
     "types-check": "vue-tsc --noEmit",
-    "lint:script": "eslint -c .eslintrc.cjs \"./src/**/*.{js,ts,vue}\" --ignore-path .gitignore .",
-    "lint:prettier": "prettier --check \"src/**/*+(js|ts|vue|scss)\"",
-    "lint:style": "stylelint src/**/*.{css,scss}",
-    "lint": "npm run lint:script && npm run lint:prettier && npm run lint:style",
-    "lintfix": "prettier --write --list-different \"src/**/*+(js|ts|vue|scss)\" && npm run lint:script -- --fix && npm run lint:style -- --fix",
+    "lint:partOfScript": "eslint -c .eslintrc.cjs --ignore-path .gitignore --ignore-path .eslintignore --quiet",
+    "lint:script": "npm run lint:partOfScript -- \"./src/**/*.{js,cjs,ts,vue}\"",
+    "lint:partOfPrettier": "prettier --ignore-path .gitignore",
+    "lint:prettier": "npm run lint:partOfPrettier -- \"src/**/*+(js|cjs|ts|vue|scss)\"",
+    "lint:partOfStyle": "stylelint --allow-empty-input -i .gitignore -i .stylelintignore",
+    "lint:style": "npm run lint:partOfStyle -- src/**/*.{css,scss}",
+    "lint": "npm run lint:style && npm run lint:prettier -- --check && npm run lint:script",
+    "lintfix": "npm run lint:style -- --fix && npm run lint:prettier -- --write && npm run lint:script -- --fix",
     "prepare": "husky"
   },
   "dependencies": {
@@ -60,6 +63,14 @@
     "vue-tsc": "^2.2.2"
   },
   "lint-staged": {
-    "*.{js,ts,vue,css,scss}": "npm run lint"
+    "*.{js,cjs,ts,vue}": [
+      "npm run lint:partOfScript"
+    ],
+    "*.{js,cjs,ts,vue,css,scss}": [
+      "npm run lint:partOfPrettier -- --check"
+    ],
+    "*.{css,scss}": [
+      "npm run lint:partOfStyle"
+    ]
   }
 }
