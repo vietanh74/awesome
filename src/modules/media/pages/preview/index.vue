@@ -5,57 +5,46 @@
     </div>
 
     <div v-else>
-      <Row :gutter="[16, 16]">
-        <Col
-          v-for="(galleryItem, galleryIndex) in galleryMediaFiles"
-          :key="galleryIndex"
-          :span="24 / colSize"
+      <div class="flex flex-wrap gap-4">
+        <div
+          v-for="(item, index) in mediaFiles"
+          :key="index"
+          class="w-[calc(50%-8px)] p-1 border border-solid border-violet-200 rounded overflow-hidden"
         >
-          <!-- :lg="{ span: 6 }"
-          :md="{ span: 8 }"
-          :xs="{ span: 12 }" -->
-          <!-- @click="goDetail(item)" -->
-          <div
-            v-for="(item, index) in galleryItem"
-            :key="index"
-            class="p-1 mb-4 border border-solid border-violet-200 rounded overflow-hidden"
-          >
-            <div class="mb-1 inline-flex break-all">
-              <div>{{ item.name }}</div>
-              <div class="ml-3 cursor-pointer select-none" @click="copyName(item)">
-                <CopyOutlined />
-              </div>
-
-              <div class="ml-3 cursor-pointer select-none" @click="goToUpload(item)">
-                <SendOutlined />
-              </div>
+          <div class="mb-1 inline-flex break-all">
+            <div>{{ item.name }}</div>
+            <div class="ml-3 cursor-pointer select-none" @click="copyName(item)">
+              <CopyOutlined />
             </div>
 
-            <div v-if="!isMediaItemStarted(item)" class="cursor-pointer" @click="startVideo(item)">
-              <ImageOrDefault :src="item.previewImage" class="w-full h-auto" loading="lazy">
-                <img
-                  src="/defaultPreview.jpg"
-                  class="w-full h-auto min-h-14"
-                  loading="lazy"
-                  @click="startVideo(item)"
-                />
-              </ImageOrDefault>
+            <div class="ml-3 cursor-pointer select-none" @click="goToUpload(item)">
+              <SendOutlined />
             </div>
-
-            <!-- preload="none" -->
-            <video v-else class="w-full" controls>
-              <source :src="item.url" type="video/mp4" />
-            </video>
           </div>
-        </Col>
-      </Row>
+
+          <div v-if="!isMediaItemStarted(item)" class="cursor-pointer" @click="startVideo(item)">
+            <ImageOrDefault :src="item.previewImage" class="w-full h-auto" loading="lazy">
+              <img
+                src="/defaultPreview.jpg"
+                class="w-full h-auto min-h-14"
+                loading="lazy"
+                @click="startVideo(item)"
+              />
+            </ImageOrDefault>
+          </div>
+
+          <video v-else class="w-full" controls>
+            <source :src="item.url" type="video/mp4" />
+          </video>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from 'vue';
-import { Spin, Col, Row, message } from 'ant-design-vue';
+import { Spin, message } from 'ant-design-vue';
 import { useRouter } from 'vue-router';
 import { cloneDeep, map, size, take, takeRight } from 'lodash-es';
 import { CopyOutlined, SendOutlined } from '@ant-design/icons-vue';
@@ -82,6 +71,8 @@ const colSize = computed<ColSize>(() => {
 
   return 2;
 });
+
+const galleryItemWidth = () => {};
 
 const galleryMediaFiles = computed(() => {
   const results: any[] = [];
