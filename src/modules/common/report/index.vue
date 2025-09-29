@@ -51,8 +51,8 @@ const screenState = reactive({
   isLoading: false,
 });
 const dayOffConfigs = [
-  { user: 'gamdth1', day: 'ngày 05/04', effort: 7 },
-  { user: 'anhhd55', day: 'ngày 31/03', effort: 7 },
+  // { user: 'gamdth1', day: 'ngày 05/04', effort: 7 },
+  // { user: 'anhhd55', day: 'ngày 31/03', effort: 7 },
   //
 ];
 
@@ -61,9 +61,8 @@ onMounted(() => {
 });
 
 async function getIssues() {
-  // const assignee = 'linhhv22,vinhtq,tampv,quangnn83';
-  const assignee = 'gamdth1,huongcm,anhhd55,thanhdh25,thanhtt151,anhhv71,truonghd10,anhtv56';
-  const jql = `("Start date (WBSGantt)" >= startOfWeek(1d) AND due <= endOfWeek(1d) OR "Start date (WBSGantt)" is EMPTY OR due is EMPTY) AND project = "Customer Services" AND issueFunction not in hasSubtasks() AND status not in (Cancelled, Pending) AND Sprint in openSprints() AND Sprint in openSprints() AND assignee in (${assignee})`;
+  const assignee = 'huongcm,anhhd55,thanhdh25,anhhv71,truonghd10,anhtv56';
+  const jql = `("Start date (WBSGantt)" >= startOfWeek(1d) AND due <= endOfWeek(1d) OR "Start date (WBSGantt)" is EMPTY OR due is EMPTY) AND "Start date (WBSGantt)" >= startOfWeek(1d) AND due <= endOfWeek(1d) AND issueFunction not in hasSubtasks() AND status not in (Cancelled, Pending) AND assignee in (${assignee})`;
 
   screenState.isLoading = true;
   const { data } = await jiraService
@@ -179,15 +178,15 @@ function convertToReports(subTasks: any[]) {
 }
 
 function mapDayOffByUserToRecords(username: string) {
-  const dayOffItems = dayOffConfigs.filter((item) => item.user === username);
-  const totalOff = dayOffItems.reduce((val, item) => {
+  const dayOffItems = dayOffConfigs.filter((item: any) => item.user === username);
+  const totalOff = dayOffItems.reduce((val, item: any) => {
     const count = val + item.effort;
 
     return count;
   }, 0);
 
   return {
-    items: dayOffItems.map((item) => ({
+    items: dayOffItems.map((item: any) => ({
       type: ReportDataType.DAY_OFF,
       totalEstimate: item.effort,
       totalEstimateHour: `${item.effort}h`,

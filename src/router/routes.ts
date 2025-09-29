@@ -24,11 +24,17 @@ const routes: RouteRecordRaw[] = [
     path: 'report',
     name: RouteName.REPORT,
     component: ReportPage,
+    meta: {
+      isPublic: true,
+    },
   },
   {
     path: 'mail-report',
     name: RouteName.MAIL_REPORT,
     component: MailReportPage,
+    meta: {
+      isPublic: true,
+    },
   },
   {
     path: 'login',
