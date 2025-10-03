@@ -73,7 +73,31 @@ onMounted(() => {
   getIssues();
 });
 
+// async function fetchIssues(startAt: number = 0, fetchedIssues: any[] = []) {
+//   sprintDays.value = getAllDaysOfSprint();
+//   const assignee = 'huongcm,anhhd55,thanhdh25,anhhv71,truonghd10,anhtv56';
+//   const jql = `("Start date (WBSGantt)" >= startOfWeek(1d) AND due <= endOfWeek(1d) OR "Start date (WBSGantt)" is EMPTY OR due is EMPTY) AND "Start date (WBSGantt)" >= startOfWeek(1d) AND due <= endOfWeek(1d) AND issueFunction not in hasSubtasks() AND status not in (Cancelled, Pending) AND assignee in (${assignee})`;
+
+//   screenState.isLoading = false;
+//   const { data } = await jiraService.searchIssues({
+//     jql,
+//     maxResults: 30,
+//     startAt,
+//     // maxResults: 20,
+//   });
+
+//   const issues: any[] = fetchedIssues.concat(data.issues);
+//   getIssues(issues);
+
+//   if (size(issues) >= data.total) {
+//     return;
+//   }
+
+//   fetchIssues(startAt + 1, issues);
+// }
+
 async function getIssues() {
+  sprintDays.value = getAllDaysOfSprint();
   const assignee = 'huongcm,anhhd55,thanhdh25,anhhv71,truonghd10,anhtv56';
   const jql = `("Start date (WBSGantt)" >= startOfWeek(1d) AND due <= endOfWeek(1d) OR "Start date (WBSGantt)" is EMPTY OR due is EMPTY) AND "Start date (WBSGantt)" >= startOfWeek(1d) AND due <= endOfWeek(1d) AND issueFunction not in hasSubtasks() AND status not in (Cancelled, Pending) AND assignee in (${assignee})`;
 
@@ -89,7 +113,6 @@ async function getIssues() {
   const issues: any[] = data.issues;
 
   let convertedValues: any[] = [];
-  sprintDays.value = getAllDaysOfSprint();
 
   const reduceAssigneeIssues: Record<string, AssigneeIssue> = reduce(
     issues,
