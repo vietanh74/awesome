@@ -3,6 +3,7 @@ import type { RouteRecordRaw } from 'vue-router';
 import { RouteName } from '@/shared/constants';
 import Homepage from '@/modules/common/homepage/index.vue';
 import ReportPage from '@/modules/common/report/index.vue';
+import ResourcePage from '@/modules/common/resource/index.vue';
 import MailReportPage from '@/modules/common/mailReport/index.vue';
 import NotFound from '@/modules/common/notFound/index.vue';
 
@@ -24,6 +25,14 @@ const routes: RouteRecordRaw[] = [
     path: 'report',
     name: RouteName.REPORT,
     component: ReportPage,
+    meta: {
+      isPublic: true,
+    },
+  },
+  {
+    path: 'resource',
+    name: RouteName.RESOURCE,
+    component: ResourcePage,
     meta: {
       isPublic: true,
     },
