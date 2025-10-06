@@ -94,8 +94,15 @@ onMounted(() => {
 
 async function getIssues() {
   sprintDays.value = getAllDaysOfSprint();
+
+  const ignoredSpecialSprintDays = sprintDays.value.filter(
+    (item) => ![NON_SET_TIMELINE_KEY].includes(item.key),
+  );
+
+  const startDayOfSprint = ignoredSpecialSprintDays[0].key;
+  const endDayOfSprint = ignoredSpecialSprintDays[ignoredSpecialSprintDays.length - 1].key;
   const assignee = 'huongcm,anhhd55,thanhdh25,anhhv71,truonghd10,anhtv56';
-  const jql = `(("Start date (WBSGantt)" >= startOfWeek(1d) AND due <= endOfWeek(1d)) OR (project = "Customer Services" AND Sprint in openSprints() AND "Start date (WBSGantt)" is EMPTY AND duedate is EMPTY)) AND issueFunction not in hasSubtasks() AND status not in (Cancelled, Pending) AND assignee in (${assignee})`;
+  const jql = `(("Start date (WBSGantt)" >= "${startDayOfSprint}" AND due <= "${endDayOfSprint}") OR (project = "Customer Services" AND Sprint in openSprints() AND "Start date (WBSGantt)" is EMPTY AND duedate is EMPTY)) AND issueFunction not in hasSubtasks() AND status not in (Cancelled, Pending) AND assignee in (${assignee})`;
 
   screenState.isLoading = true;
   const { data } = await jiraService
@@ -216,6 +223,7 @@ function mapDataToTableContent(assigneeIssue: AssigneeIssue): Record<string, any
       const startDate = get(item, `fields.${startDateField}`);
       const dueDate = get(item, 'fields.duedate');
 
+      // Tổng giờ các task chưa có timeline
       if (sprintDay.key === NON_SET_TIMELINE_KEY && !startDate && !dueDate) {
         return val + getTotalTime(item);
       }
