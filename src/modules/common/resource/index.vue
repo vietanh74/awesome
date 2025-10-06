@@ -99,7 +99,7 @@ onMounted(() => {
 async function getIssues() {
   sprintDays.value = getAllDaysOfSprint();
   const assignee = 'huongcm,anhhd55,thanhdh25,anhhv71,truonghd10,anhtv56';
-  const jql = `("Start date (WBSGantt)" >= startOfWeek(1d) AND due <= endOfWeek(1d) OR "Start date (WBSGantt)" is EMPTY OR due is EMPTY) AND "Start date (WBSGantt)" >= startOfWeek(1d) AND due <= endOfWeek(1d) AND issueFunction not in hasSubtasks() AND status not in (Cancelled, Pending) AND assignee in (${assignee})`;
+  const jql = `(("Start date (WBSGantt)" >= startOfWeek(1d) AND due <= endOfWeek(1d)) OR (project = "Customer Services" AND Sprint in openSprints() AND "Start date (WBSGantt)" is EMPTY AND duedate is EMPTY)) AND issueFunction not in hasSubtasks() AND status not in (Cancelled, Pending) AND assignee in (${assignee})`;
 
   screenState.isLoading = true;
   const { data } = await jiraService
