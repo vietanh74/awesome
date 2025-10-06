@@ -20,6 +20,7 @@
               v-for="(sprintDay, sprintDayIndex) in sprintDays"
               :key="sprintDayIndex"
               :val="reportData[sprintDay.key]"
+              :sprintDay="sprintDay"
             />
           </tr>
         </tbody>
@@ -48,12 +49,7 @@ import {
 
 import { jiraService } from '@/services';
 import StyledTd from './StyledTd/index.vue';
-
-interface SprintDay {
-  key: string;
-  title: string;
-  isDayOff: boolean;
-}
+import { NON_SET_TIMELINE_KEY, SprintDay } from './constants';
 
 interface AssigneeIssue {
   userKey: string;
@@ -166,13 +162,21 @@ function getAllDaysOfSprint(): SprintDay[] {
     end: endDay,
   });
 
-  return days.map((item) => {
+  const mappedDays = days.map((item) => {
     return {
       key: formatDateToKey(item),
       title: format(item, 'dd/MM'),
       isDayOff: isDayOff(item),
     };
   });
+
+  mappedDays.unshift({
+    title: '- / -',
+    key: NON_SET_TIMELINE_KEY,
+    isDayOff: false,
+  });
+
+  return mappedDays;
 }
 
 function isOdd(n: number) {
@@ -211,6 +215,10 @@ function mapDataToTableContent(assigneeIssue: AssigneeIssue): Record<string, any
     const totalHourInDay = assigneeIssue.items.reduce((val, item) => {
       const startDate = get(item, `fields.${startDateField}`);
       const dueDate = get(item, 'fields.duedate');
+
+      if (sprintDay.key === NON_SET_TIMELINE_KEY && !startDate && !dueDate) {
+        return val + getTotalTime(item);
+      }
 
       if (!startDate || !dueDate) {
         return val;

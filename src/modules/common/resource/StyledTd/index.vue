@@ -1,18 +1,28 @@
 <template>
-  <td :class="tdClasses">{{ val ? round(val, 2) : '-' }}</td>
+  <td :class="tdClasses">{{ tdVal }}</td>
 </template>
 
 <script setup lang="ts">
 import { round } from 'lodash-es';
 import { computed } from 'vue';
+import { NON_SET_TIMELINE_KEY, SprintDay } from '../constants';
 
 interface Props {
   val: number;
+  sprintDay: SprintDay;
 }
 
 const props = defineProps<Props>();
 
 const tdClasses = computed<string>(() => {
+  if (props.sprintDay.isDayOff) {
+    return 'bg-gray-300';
+  }
+
+  if (props.sprintDay.key === NON_SET_TIMELINE_KEY) {
+    return 'bg-gray-200';
+  }
+
   if (!props.val) {
     return '';
   }
@@ -26,5 +36,17 @@ const tdClasses = computed<string>(() => {
   }
 
   return '';
+});
+
+const tdVal = computed<string | number>(() => {
+  if (props.sprintDay.isDayOff) {
+    return '';
+  }
+
+  if (props.sprintDay.key === NON_SET_TIMELINE_KEY && !props.val) {
+    return '';
+  }
+
+  return props.val ? round(props.val, 2) : '-';
 });
 </script>
