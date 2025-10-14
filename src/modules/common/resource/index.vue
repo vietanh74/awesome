@@ -101,12 +101,12 @@ async function getIssues() {
     (item) => ![NON_SET_TIMELINE_KEY].includes(item.key),
   );
 
-  const startDayOfSprint = route.query.current ? 'startOfWeek(1d)' : ignoredSpecialSprintDays[0].key;
+  const startDayOfSprint = route.query.current ? 'startOfWeek(1d)' : `"${ignoredSpecialSprintDays[0].key}"`;
   const endDayOfSprint = route.query.current
     ? 'endOfWeek(1d)'
-    : ignoredSpecialSprintDays[ignoredSpecialSprintDays.length - 1].key;
+    : `"${ignoredSpecialSprintDays[ignoredSpecialSprintDays.length - 1].key}"`;
   const assignee = 'huongcm,anhhd55,thanhdh25,anhhv71,truonghd10,anhtv56';
-  const jql = `(("Start date (WBSGantt)" >= "${startDayOfSprint}" AND due <= "${endDayOfSprint}") OR (project = "Customer Services" AND Sprint in openSprints() AND "Start date (WBSGantt)" is EMPTY AND duedate is EMPTY)) AND issueFunction not in hasSubtasks() AND status not in (Cancelled, Pending) AND assignee in (${assignee})`;
+  const jql = `(("Start date (WBSGantt)" >= ${startDayOfSprint} AND due <= ${endDayOfSprint}) OR (project = "Customer Services" AND Sprint in openSprints() AND "Start date (WBSGantt)" is EMPTY AND duedate is EMPTY)) AND issueFunction not in hasSubtasks() AND status not in (Cancelled, Pending) AND assignee in (${assignee})`;
 
   screenState.isLoading = true;
   const { data } = await jiraService
