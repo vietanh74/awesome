@@ -203,17 +203,19 @@ function isDayOff(date: Date): boolean {
     return true;
   }
 
-  if (!isSaturday(date)) {
-    return false;
-  }
-
-  const countWeek = getWeek(date);
-
-  if (isOdd(countWeek)) {
-    return true;
-  }
-
   return false;
+
+  // if (!isSaturday(date)) {
+  //   return false;
+  // }
+
+  // const countWeek = getWeek(date);
+
+  // if (isOdd(countWeek)) {
+  //   return true;
+  // }
+
+  // return false;
 }
 
 function mapDataToTableContent(assigneeIssue: AssigneeIssue): Record<string, any> {
