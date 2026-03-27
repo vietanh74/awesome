@@ -114,8 +114,6 @@ async function getList() {
     return;
   }
 
-  data.splice(0, 1);
-
   mediaFiles.value = map(data, (item) => ({
     ...item,
     name: item.name.replace('tests/', '').replace('.mp4', ''),
