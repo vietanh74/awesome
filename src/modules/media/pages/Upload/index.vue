@@ -6,20 +6,25 @@
     </div>
     <input ref="fileInputRef" class="hidden" type="file" @change="(e) => onSelectMedia(e)" />
 
-    <div v-if="screenState.uploading" class="mt-4 w-full max-w-md">
-      <div class="mb-1 flex justify-between text-sm text-gray-600">
+    <div v-if="screenState.uploading" class="mt-5 w-full max-w-md">
+      <div class="mb-2 flex justify-between text-sm font-medium text-slate-600">
         <span>Uploading...</span>
-        <span>{{ screenState.progress }}%</span>
+        <span class="text-blue-600">{{ Math.min(100, Math.round(displayProgress)) }}%</span>
       </div>
-      <div class="h-3 w-full overflow-hidden rounded-full bg-gray-200">
+      <!-- Progress Bar Track -->
+      <div class="h-2.5 w-full overflow-hidden rounded-full bg-slate-100 shadow-inner">
+        <!-- Progress Bar Fill -->
         <div
-          class="h-full rounded-full bg-blue-500 transition-all duration-300"
-          :style="{ width: `${screenState.progress}%` }"
-        />
+          class="h-full rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 shadow-sm"
+          :style="{ width: `${displayProgress}%` }"
+        >
+          <!-- Optional shiny overlay for premium feel -->
+          <div class="h-full w-full bg-white/20" />
+        </div>
       </div>
     </div>
 
-    <div class="mt-4">
+    <div class="mt-5">
       <Button type="primary" :loading="screenState.uploading" @click="submit()">Submit</Button>
     </div>
   </div>
@@ -29,6 +34,7 @@
 import { message, Button } from 'ant-design-vue';
 import { nanoid } from 'nanoid';
 import { reactive, ref, onBeforeUnmount } from 'vue';
+import { useTransition, TransitionPresets } from '@vueuse/core';
 
 import { commonService } from '@/services';
 
@@ -37,8 +43,14 @@ let streamInstance: ReturnType<typeof commonService.getStreamProgress> | null = 
 
 const screenState = reactive({
   uploading: false,
-  progress: 0,
 });
+
+const targetProgress = ref(0);
+const displayProgress = useTransition(targetProgress, {
+  duration: 800,
+  transition: TransitionPresets.easeOutCubic,
+});
+
 const formState = ref<{
   file?: any;
 }>({
@@ -65,14 +77,15 @@ function closeStream() {
 function listenProgress(hashid: string) {
   streamInstance = commonService.getStreamProgress(hashid, (data) => {
     if (data.status === 'UPLOADING' && data.total > 0) {
-      screenState.progress = Math.round((data.loaded / data.total) * 100);
+      targetProgress.value = Math.round((data.loaded / data.total) * 100);
       return;
     }
 
     if (data.status === 'DONE') {
-      screenState.progress = 100;
-      screenState.uploading = false;
-      closeStream();
+      targetProgress.value = 100;
+      // Note: We don't immediately set screenState.uploading = false
+      // here because our display progress might still be catching up.
+      // We will handle resetting UI state after upload finishes.
     }
   });
 }
@@ -88,20 +101,27 @@ async function submit() {
   formData.append('file', formState.value.file);
 
   screenState.uploading = true;
-  screenState.progress = 0;
+  targetProgress.value = 0;
 
   listenProgress(hashid);
 
   const { error } = await commonService.uploadStreamFile(hashid, formData);
 
-  screenState.uploading = false;
+  targetProgress.value = 100;
 
   if (error) {
+    screenState.uploading = false;
     closeStream();
     return;
   }
 
-  message.success('Upload completed!');
+  // Allow animation to complete before hiding the bar (about 800ms)
+  setTimeout(() => {
+    screenState.uploading = false;
+    message.success('Upload completed!');
+  }, 800);
+
+  closeStream();
 }
 
 onBeforeUnmount(() => {
