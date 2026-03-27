@@ -25,7 +25,7 @@ export default ({ mode }) => {
       port: parseInt(process.env.VITE_APP_PORT) || 3000,
     },
     build: {
-      rollupOptions: {
+      rolldownOptions: {
         plugins: [
           copy({
             targets: [{ src: `${BUILD_PATH}/index.html`, dest: BUILD_PATH, rename: '404.html' }],
