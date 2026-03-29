@@ -5,37 +5,43 @@
     </div>
 
     <div v-else>
-      <div class="flex flex-wrap gap-4">
+      <div class="flex gap-4 items-start">
         <div
-          v-for="(item, index) in mediaFiles"
-          :key="index"
-          class="w-[calc(50%-8px)] p-1 border border-solid border-violet-200 rounded overflow-hidden"
+          v-for="(colItems, colIndex) in galleryMediaFiles"
+          :key="colIndex"
+          class="flex flex-col gap-4 flex-1 min-w-0"
         >
-          <div class="mb-1 inline-flex break-all">
-            <div>{{ item.name }}</div>
-            <div class="ml-3 cursor-pointer select-none" @click="copyName(item)">
-              <CopyOutlined />
+          <div
+            v-for="(item, index) in colItems"
+            :key="item.id || index"
+            class="p-1 border border-solid border-violet-200 rounded overflow-hidden w-full m-0"
+          >
+            <div class="mb-1 inline-flex break-all">
+              <div>{{ item.name }}</div>
+              <div class="ml-3 cursor-pointer select-none" @click="copyName(item)">
+                <CopyOutlined />
+              </div>
+
+              <div class="ml-3 cursor-pointer select-none" @click="goToUpload(item)">
+                <SendOutlined />
+              </div>
             </div>
 
-            <div class="ml-3 cursor-pointer select-none" @click="goToUpload(item)">
-              <SendOutlined />
+            <div v-if="!isMediaItemStarted(item)" class="cursor-pointer" @click="startVideo(item)">
+              <ImageOrDefault :src="item.previewImage" class="w-full h-auto" loading="lazy">
+                <img
+                  src="/defaultPreview.jpg"
+                  class="w-full h-auto min-h-14"
+                  loading="lazy"
+                  @click="startVideo(item)"
+                />
+              </ImageOrDefault>
             </div>
-          </div>
 
-          <div v-if="!isMediaItemStarted(item)" class="cursor-pointer" @click="startVideo(item)">
-            <ImageOrDefault :src="item.previewImage" class="w-full h-auto" loading="lazy">
-              <img
-                src="/defaultPreview.jpg"
-                class="w-full h-auto min-h-14"
-                loading="lazy"
-                @click="startVideo(item)"
-              />
-            </ImageOrDefault>
+            <video v-else class="w-full" controls>
+              <source :src="item.url" type="video/mp4" />
+            </video>
           </div>
-
-          <video v-else class="w-full" controls>
-            <source :src="item.url" type="video/mp4" />
-          </video>
         </div>
       </div>
     </div>
@@ -46,15 +52,13 @@
 import { computed, onMounted, reactive, ref } from 'vue';
 import { Spin, message } from 'ant-design-vue';
 import { useRouter } from 'vue-router';
-import { cloneDeep, map, size, take, takeRight } from 'lodash-es';
+import { map } from 'lodash-es';
 import { CopyOutlined, SendOutlined } from '@ant-design/icons-vue';
-import { useClipboard, breakpointsTailwind, useBreakpoints } from '@vueuse/core';
+import { useClipboard } from '@vueuse/core';
 
 import { commonService } from '@/services';
 import { RouteName } from '@/shared/constants';
 import { ImageOrDefault } from '@/components';
-
-type ColSize = 2 | 3 | 4;
 
 const router = useRouter();
 const screenState = reactive({
@@ -62,41 +66,16 @@ const screenState = reactive({
 });
 const mediaFiles = ref<any[]>([]);
 const { copy } = useClipboard();
-const breakpoints = useBreakpoints(breakpointsTailwind);
 
-const colSize = computed<ColSize>(() => {
-  if (breakpoints.lg.value) {
-    return 4;
-  }
-
-  return 2;
-});
-
-const galleryItemWidth = () => {};
+const colSize = ref<number>(2);
 
 const galleryMediaFiles = computed(() => {
-  const results: any[] = [];
-  let clonedMediaFiles = cloneDeep(mediaFiles.value);
-  const mediaFilesCount = size(mediaFiles.value);
+  const count = Math.max(1, colSize.value || 1);
+  const results: any[][] = Array.from({ length: count }, () => []);
 
-  if (mediaFilesCount === 0) {
-    return [];
-  }
-
-  const perColItemSize = Math.trunc(mediaFilesCount / colSize.value);
-
-  for (let i = 1; i <= colSize.value; i++) {
-    if (i === colSize.value) {
-      const items = clonedMediaFiles;
-      results.push(items);
-      continue;
-    }
-
-    const tempMediaClount = size(clonedMediaFiles);
-    const items = take(clonedMediaFiles, perColItemSize);
-    results.push(items);
-    clonedMediaFiles = takeRight(clonedMediaFiles, tempMediaClount - perColItemSize);
-  }
+  mediaFiles.value.forEach((item, index) => {
+    results[index % count].push(item);
+  });
 
   return results;
 });
