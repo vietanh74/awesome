@@ -7,21 +7,29 @@
     <input ref="fileInputRef" class="hidden" type="file" @change="(e) => onSelectMedia(e)" />
 
     <div v-if="screenState.uploading" class="mt-5 w-full max-w-md">
-      <div class="mb-2 flex justify-between text-sm font-medium text-slate-600">
-        <span>Uploading...</span>
-        <span class="text-blue-600">{{ Math.min(100, Math.round(displayProgress)) }}%</span>
-      </div>
-      <!-- Progress Bar Track -->
-      <div class="h-2.5 w-full overflow-hidden rounded-full bg-slate-100 shadow-inner">
-        <!-- Progress Bar Fill -->
-        <div
-          class="h-full rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 shadow-sm"
-          :style="{ width: `${displayProgress}%` }"
-        >
-          <!-- Optional shiny overlay for premium feel -->
-          <div class="h-full w-full bg-white/20" />
+      <template v-if="screenState.status === 'waiting_or_done'">
+        <div class="mb-2 text-sm font-medium text-slate-600">Preparing...</div>
+        <div class="h-2.5 w-full overflow-hidden rounded-full bg-slate-100 shadow-inner">
+          <div class="h-full w-full rounded-full bg-slate-200 animate-pulse shadow-sm"></div>
         </div>
-      </div>
+      </template>
+      <template v-else>
+        <div class="mb-2 flex justify-between text-sm font-medium text-slate-600">
+          <span>Uploading...</span>
+          <span class="text-blue-600">{{ Math.min(100, Math.round(displayProgress)) }}%</span>
+        </div>
+        <!-- Progress Bar Track -->
+        <div class="h-2.5 w-full overflow-hidden rounded-full bg-slate-100 shadow-inner">
+          <!-- Progress Bar Fill -->
+          <div
+            class="h-full rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 shadow-sm"
+            :style="{ width: `${displayProgress}%` }"
+          >
+            <!-- Optional shiny overlay for premium feel -->
+            <div class="h-full w-full bg-white/20" />
+          </div>
+        </div>
+      </template>
     </div>
 
     <div class="mt-5">
@@ -43,6 +51,7 @@ let streamInstance: ReturnType<typeof commonService.getStreamProgress> | null = 
 
 const screenState = reactive({
   uploading: false,
+  status: '',
 });
 
 const targetProgress = ref(0);
@@ -76,6 +85,8 @@ function closeStream() {
 
 function listenProgress(hashid: string) {
   streamInstance = commonService.getStreamProgress(hashid, (data) => {
+    screenState.status = data.status;
+
     if (data.status === 'UPLOADING' && data.total > 0) {
       targetProgress.value = Math.round((data.loaded / data.total) * 100);
       return;
@@ -101,6 +112,7 @@ async function submit() {
   formData.append('file', formState.value.file);
 
   screenState.uploading = true;
+  screenState.status = 'waiting_or_done';
   targetProgress.value = 0;
 
   listenProgress(hashid);
