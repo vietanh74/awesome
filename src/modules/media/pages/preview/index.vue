@@ -14,33 +14,67 @@
           <div
             v-for="(item, index) in colItems"
             :key="item.id || index"
-            class="p-1 border border-solid border-violet-200 rounded overflow-hidden w-full m-0"
+            class="group bg-white border border-slate-200 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden w-full m-0 flex flex-col"
           >
-            <div class="mb-1 inline-flex break-all">
-              <div>{{ item.name }}</div>
-              <div class="ml-3 cursor-pointer select-none" @click="copyName(item)">
-                <CopyOutlined />
+            <div
+              class="px-3 py-2.5 flex items-start justify-between gap-3 bg-slate-50/50 border-b border-slate-100"
+            >
+              <div class="font-medium text-slate-700 text-sm break-all leading-tight mt-0.5">
+                {{ item.name }}
               </div>
+              <div class="flex items-center gap-1.5 shrink-0">
+                <div
+                  class="flex items-center justify-center w-7 h-7 rounded-md text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 cursor-pointer transition-colors"
+                  title="Copy Name"
+                  @click="copyName(item)"
+                >
+                  <CopyOutlined />
+                </div>
 
-              <div class="ml-3 cursor-pointer select-none" @click="goToUpload(item)">
-                <SendOutlined />
+                <div
+                  class="flex items-center justify-center w-7 h-7 rounded-md text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 cursor-pointer transition-colors"
+                  title="Go to Upload"
+                  @click="goToUpload(item)"
+                >
+                  <SendOutlined />
+                </div>
               </div>
             </div>
 
-            <div v-if="!isMediaItemStarted(item)" class="cursor-pointer" @click="startVideo(item)">
-              <ImageOrDefault :src="item.previewImage" class="w-full h-auto" loading="lazy">
-                <img
-                  src="/defaultPreview.jpg"
-                  class="w-full h-auto min-h-14"
+            <div class="relative bg-slate-100">
+              <div
+                v-if="!isMediaItemStarted(item)"
+                class="cursor-pointer relative block"
+                @click="startVideo(item)"
+              >
+                <ImageOrDefault
+                  :src="item.previewImage"
+                  class="w-full h-auto block object-cover"
                   loading="lazy"
-                  @click="startVideo(item)"
-                />
-              </ImageOrDefault>
-            </div>
+                >
+                  <img
+                    src="/defaultPreview.jpg"
+                    class="w-full h-auto min-h-[80px] block object-cover"
+                    loading="lazy"
+                  />
+                </ImageOrDefault>
+                <div
+                  class="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none"
+                >
+                  <div
+                    class="w-10 h-10 rounded-full bg-white/90 backdrop-blur-sm shadow-sm flex items-center justify-center text-slate-800 scale-90 group-hover:scale-100 transition-transform"
+                  >
+                    <svg class="w-5 h-5 ml-0.5" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
 
-            <video v-else class="w-full" controls>
-              <source :src="item.url" type="video/mp4" />
-            </video>
+              <video v-else class="w-full block bg-black" controls autoplay>
+                <source :src="item.url" type="video/mp4" />
+              </video>
+            </div>
           </div>
         </div>
       </div>
