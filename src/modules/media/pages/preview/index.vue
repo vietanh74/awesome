@@ -1,15 +1,15 @@
 <template>
-  <div class="p-4">
+  <div class="py-4 px-1">
     <div v-if="screenState.fetching" class="h-12 flex items-center justify-center">
       <Spin />
     </div>
 
     <div v-else>
-      <div class="flex gap-4 items-start">
+      <div class="flex gap-1 items-start">
         <div
           v-for="(colItems, colIndex) in galleryMediaFiles"
           :key="colIndex"
-          class="flex flex-col gap-4 flex-1 min-w-0"
+          class="flex flex-col gap-1 flex-1 min-w-0"
         >
           <div
             v-for="(item, index) in colItems"
