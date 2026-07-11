@@ -45,8 +45,8 @@ class CommonService {
     return await apiClient.get('preview-images');
   }
 
-  async deletePreview(data): Promise<IResponse> {
-    return await apiClient.post('delete-preview', data);
+  async deleteMedia(data): Promise<IResponse> {
+    return await apiClient.post('delete-media', data);
   }
   async renamePreview(data): Promise<IResponse> {
     return await apiClient.post('rename-preview', data);

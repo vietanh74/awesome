@@ -156,7 +156,7 @@ async function submit() {
 }
 
 async function confirmDelete(mediaItem) {
-  const { error, message: msg } = await commonService.deletePreview({ fileId: mediaItem.id });
+  const { error, message: msg } = await commonService.deleteMedia({ fileId: mediaItem.id });
 
   if (error) {
     return;

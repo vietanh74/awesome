@@ -38,6 +38,14 @@
                 >
                   <SendOutlined />
                 </div>
+
+                <div
+                  class="flex items-center justify-center w-7 h-7 rounded-md text-slate-400 hover:text-red-600 hover:bg-red-50 cursor-pointer transition-colors"
+                  title="Xóa"
+                  @click="confirmDelete(item)"
+                >
+                  <DeleteOutlined />
+                </div>
               </div>
             </div>
 
@@ -84,10 +92,10 @@
 
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from 'vue';
-import { Spin, message } from 'ant-design-vue';
+import { Spin, message, Modal } from 'ant-design-vue';
 import { useRouter } from 'vue-router';
 import { map } from 'lodash-es';
-import { CopyOutlined, SendOutlined } from '@ant-design/icons-vue';
+import { CopyOutlined, SendOutlined, DeleteOutlined } from '@ant-design/icons-vue';
 import { useClipboard } from '@vueuse/core';
 
 import { commonService } from '@/services';
@@ -161,6 +169,26 @@ async function copyName(mediaItem) {
 
 async function goToUpload(mediaItem) {
   router.push({ name: RouteName.UPLOAD_IMAGE, query: { fileName: mediaItem.name } });
+}
+
+function confirmDelete(mediaItem) {
+  Modal.confirm({
+    title: 'Xóa file này?',
+    content: mediaItem.name,
+    okText: 'Xóa',
+    okType: 'danger',
+    cancelText: 'Hủy',
+    onOk: async () => {
+      const { error, message: msg } = await commonService.deleteMedia({ fileId: mediaItem.id });
+
+      if (error) {
+        return;
+      }
+
+      mediaFiles.value = mediaFiles.value.filter((item) => item.id !== mediaItem.id);
+      message.success(msg);
+    },
+  });
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
