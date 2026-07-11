@@ -22,31 +22,32 @@
               <div class="font-medium text-slate-700 text-sm break-all leading-tight mt-0.5">
                 {{ item.name }}
               </div>
-              <div class="flex items-center gap-1.5 shrink-0">
+              <Dropdown :trigger="['click']" placement="bottomRight">
                 <div
-                  class="flex items-center justify-center w-7 h-7 rounded-md text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 cursor-pointer transition-colors"
-                  title="Copy Name"
-                  @click="copyName(item)"
+                  class="flex items-center justify-center w-7 h-7 rounded-md text-slate-400 hover:text-slate-700 hover:bg-slate-200/70 cursor-pointer transition-colors shrink-0"
+                  title="Actions"
+                  @click.prevent
                 >
-                  <CopyOutlined />
+                  <MoreOutlined />
                 </div>
 
-                <div
-                  class="flex items-center justify-center w-7 h-7 rounded-md text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 cursor-pointer transition-colors"
-                  title="Go to Upload"
-                  @click="goToUpload(item)"
-                >
-                  <SendOutlined />
-                </div>
-
-                <div
-                  class="flex items-center justify-center w-7 h-7 rounded-md text-slate-400 hover:text-red-600 hover:bg-red-50 cursor-pointer transition-colors"
-                  title="Xóa"
-                  @click="confirmDelete(item)"
-                >
-                  <DeleteOutlined />
-                </div>
-              </div>
+                <template #overlay>
+                  <Menu>
+                    <MenuItem key="copy" @click="copyName(item)">
+                      <CopyOutlined class="mr-2" />
+                      Copy Name
+                    </MenuItem>
+                    <MenuItem key="upload" @click="goToUpload(item)">
+                      <SendOutlined class="mr-2" />
+                      Go to Upload
+                    </MenuItem>
+                    <MenuItem key="delete" danger @click="confirmDelete(item)">
+                      <DeleteOutlined class="mr-2" />
+                      Xóa
+                    </MenuItem>
+                  </Menu>
+                </template>
+              </Dropdown>
             </div>
 
             <div class="relative bg-slate-100">
@@ -92,15 +93,17 @@
 
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from 'vue';
-import { Spin, message, Modal } from 'ant-design-vue';
+import { Spin, message, Modal, Dropdown, Menu } from 'ant-design-vue';
 import { useRouter } from 'vue-router';
 import { map } from 'lodash-es';
-import { CopyOutlined, SendOutlined, DeleteOutlined } from '@ant-design/icons-vue';
+import { CopyOutlined, SendOutlined, DeleteOutlined, MoreOutlined } from '@ant-design/icons-vue';
 import { useClipboard } from '@vueuse/core';
 
 import { commonService } from '@/services';
 import { RouteName } from '@/shared/constants';
 import { ImageOrDefault } from '@/components';
+
+const MenuItem = Menu.Item;
 
 const router = useRouter();
 const screenState = reactive({
