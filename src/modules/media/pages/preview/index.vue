@@ -1,10 +1,10 @@
 <template>
-  <div class="py-4 px-1">
-    <div v-if="screenState.fetching" class="h-12 flex items-center justify-center">
+  <div>
+    <div v-if="screenState.fetching" class="h-screen flex items-center justify-center">
       <Spin />
     </div>
 
-    <div v-else>
+    <div v-else class="py-4 px-1">
       <div class="flex gap-1 items-start">
         <div
           v-for="(colItems, colIndex) in galleryMediaFiles"
@@ -19,12 +19,12 @@
             <div
               class="px-3 py-2.5 flex items-start justify-between gap-3 bg-slate-50/50 border-b border-slate-100"
             >
-              <div class="font-medium text-slate-700 text-sm break-words leading-tight mt-0.5 flex-1 min-w-0">
+              <div class="text-slate-700 text-xs wrap-break-word leading-tight flex-1 min-w-0">
                 {{ item.name }}
               </div>
               <Dropdown :trigger="['click']" placement="bottomRight">
                 <div
-                  class="flex items-center justify-center w-7 h-7 rounded-md text-slate-400 hover:text-slate-700 hover:bg-slate-200/70 cursor-pointer transition-colors shrink-0"
+                  class="flex items-center justify-center size-4 rounded-md text-slate-400 hover:text-slate-700 hover:bg-slate-200/70 cursor-pointer transition-colors shrink-0"
                   title="Actions"
                   @click.prevent
                 >
