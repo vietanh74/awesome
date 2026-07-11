@@ -1,1 +1,0 @@
-import{F as e,g as t,j as n,p as r}from"./runtime-core.esm-bundler-Bf1I1-Ea.js";import{l as i}from"./index-CWDvltKy.js";var a={},o={id:`__main`};function s(i,a){let s=e(`router-view`);return n(),r(`div`,o,[t(s)])}var c=i(a,[[`render`,s]]);export{c as default};
