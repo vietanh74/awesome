@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts" setup>
-import { size } from 'lodash';
+import { size } from 'lodash-es';
 import { StyleValue } from 'vue';
 
 const props = withDefaults(defineProps<{ name?: string; customStyles: Partial<StyleValue> }>(), {

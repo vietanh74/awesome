@@ -1,6 +1,3 @@
-import { find, get, isArray, isEmpty, isString } from 'lodash';
-import { includes } from 'lodash';
-
 import { RouteName } from '@/shared/constants';
 
 export const APP_ACCESS_TOKEN = 'awsome_access_token';

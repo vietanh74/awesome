@@ -1,13 +1,9 @@
 # Setup devlopment
 
 ```
-npm i
+pnpm i
 ```
 
 ```
-npm run prepare
-```
-
-```
-npm run dev
+pnpm run dev
 ```
