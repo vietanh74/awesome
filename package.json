@@ -11,14 +11,12 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
     "types-check": "vue-tsc --noEmit",
-    "lint:partOfScript": "eslint -c eslint.config.mjs --quiet",
-    "lint:script": "npm run lint:partOfScript --",
-    "lint:partOfPrettier": "prettier --ignore-path .gitignore",
-    "lint:prettier": "npm run lint:partOfPrettier -- \"src/**/*+(js|cjs|ts|vue|scss)\"",
-    "lint:partOfStyle": "stylelint --allow-empty-input -i .gitignore -i .stylelintignore",
-    "lint:style": "npm run lint:partOfStyle -- src/**/*.{css,scss}",
-    "lint": "npm run lint:style && npm run lint:prettier -- --check && npm run lint:script",
-    "lintfix": "npm run lint:style -- --fix && npm run lint:prettier -- --write && npm run lint:script -- --fix",
+    "lint:partOfScript": "oxlint --quiet",
+    "lint:script": "npm run lint:partOfScript -- src",
+    "lint:partOfFormat": "oxfmt",
+    "lint:format": "npm run lint:partOfFormat -- \"src/**/*.{js,cjs,ts,vue,css,scss}\"",
+    "lint": "npm run lint:script && npm run lint:format -- --check",
+    "lintfix": "npm run lint:script -- --fix && npm run lint:format -- --write",
     "prepare": "husky"
   },
   "dependencies": {
@@ -37,33 +35,19 @@
     "vue-router": "^5.2.0"
   },
   "devDependencies": {
-    "@eslint/js": "^10.0.1",
-    "@tailwindcss/postcss": "^4.3.3",
+    "@tailwindcss/vite": "^4.3.3",
     "@types/lodash-es": "^4.17.12",
     "@types/node": "^24.13.3",
-    "@typescript-eslint/parser": "^8.67.0",
     "@vitejs/plugin-vue": "^6.0.8",
-    "@vue/eslint-config-prettier": "^10.2.0",
-    "eslint": "^10.8.1",
-    "eslint-plugin-prettier": "^5.5.6",
-    "eslint-plugin-vue": "^10.10.0",
-    "globals": "^17.11.0",
     "husky": "^9.1.7",
     "lint-staged": "^17.3.0",
-    "postcss": "^8.5.26",
-    "postcss-html": "^1.8.1",
-    "prettier": "^3.9.6",
+    "oxfmt": "^0.65.0",
+    "oxlint": "^1.80.0",
     "sass": "^1.102.0",
-    "stylelint": "^17.14.1",
-    "stylelint-config-prettier-scss": "^1.0.0",
-    "stylelint-config-recommended-vue": "^2.0.0",
-    "stylelint-config-standard-scss": "^17.0.0",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.67.0",
     "vite": "^8.2.1",
     "vite-plugin-static-copy": "^4.1.1",
     "vite-svg-loader": "^5.1.1",
-    "vue-eslint-parser": "^10.4.1",
     "vue-tsc": "^3.3.9"
   },
   "volta": {
@@ -74,10 +58,7 @@
       "npm run lint:partOfScript"
     ],
     "*.{js,cjs,ts,vue,css,scss}": [
-      "npm run lint:partOfPrettier -- --check"
-    ],
-    "*.{css,scss}": [
-      "npm run lint:partOfStyle"
+      "npm run lint:partOfFormat -- --check"
     ]
   }
 }

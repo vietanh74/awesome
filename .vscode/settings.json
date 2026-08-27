@@ -1,0 +1,12 @@
+{
+  "tailwindCSS.experimental.configFile": "src/assets/styles/libs/tailwind.css",
+  "[typescript]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+  "[javascript]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+  "[vue]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+  "[scss]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+  "[css]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+  "[json]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+  "[jsonc]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+  "eslint.enable": false,
+  "prettier.enable": false
+}

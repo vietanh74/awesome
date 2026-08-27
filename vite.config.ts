@@ -1,31 +1,33 @@
-import { defineConfig, loadEnv, Plugin } from 'vite';
+import { copyFile } from 'node:fs/promises';
+import { join, resolve } from 'node:path';
+import { defineConfig, loadEnv, type Plugin } from 'vite';
+import tailwindcss from '@tailwindcss/vite';
 import vue from '@vitejs/plugin-vue';
 import svgLoader from 'vite-svg-loader';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
-import { copyFile } from 'node:fs/promises';
-import path from 'node:path';
 
-import { resolve } from 'path';
+const ROOT_DIR = import.meta.dirname;
+const BUILD_DIR = resolve(ROOT_DIR, 'dist');
 
-const BUILD_PATH = 'dist';
+const DEFAULT_PORT = 3000;
 
 function spaFallback(): Plugin {
   return {
     name: 'spa-404-fallback',
     apply: 'build',
     async closeBundle() {
-      const out = path.resolve(BUILD_PATH);
-      await copyFile(path.join(out, 'index.html'), path.join(out, '404.html'));
+      await copyFile(join(BUILD_DIR, 'index.html'), join(BUILD_DIR, '404.html'));
     },
   };
 }
 
-export default ({ mode }: any) => {
-  process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };
+export default defineConfig(({ mode }) => {
+  const env = { ...process.env, ...loadEnv(mode, ROOT_DIR) };
 
-  return defineConfig({
-    base: process.env.VITE_APP_SUB_FOLDER ? `/${process.env.VITE_APP_SUB_FOLDER}/` : '/',
+  return {
+    base: env.VITE_APP_SUB_FOLDER ? `/${env.VITE_APP_SUB_FOLDER}/` : '/',
     plugins: [
+      tailwindcss(),
       vue(),
       svgLoader(),
       viteStaticCopy({
@@ -35,14 +37,14 @@ export default ({ mode }: any) => {
     ],
     resolve: {
       alias: {
-        '@': resolve(import.meta.dirname, './src'),
+        '@': resolve(ROOT_DIR, 'src'),
       },
     },
     preview: {
-      port: 3000,
+      port: DEFAULT_PORT,
     },
     server: {
-      port: process.env.VITE_APP_PORT ? parseInt(process.env.VITE_APP_PORT) : 3000,
+      port: Number(env.VITE_APP_PORT) || DEFAULT_PORT,
     },
-  });
-};
+  };
+});

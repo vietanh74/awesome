@@ -1,0 +1,9 @@
+@layer theme;
+@import 'tailwindcss/theme.css' layer(theme);
+
+@theme {
+  --color-primary: #00904a;
+}
+
+/* unlayered on purpose: layer(utilities) would lose against ant-design styles */
+@import 'tailwindcss/utilities.css';
