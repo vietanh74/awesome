@@ -8,15 +8,13 @@
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
-    "predeploy": "npm run build",
+    "predeploy": "pnpm build",
     "deploy": "gh-pages -d dist",
     "types-check": "vue-tsc --noEmit",
-    "lint:partOfScript": "oxlint --quiet",
-    "lint:script": "npm run lint:partOfScript -- src",
-    "lint:partOfFormat": "oxfmt",
-    "lint:format": "npm run lint:partOfFormat -- \"src/**/*.{js,cjs,ts,vue,css,scss}\"",
-    "lint": "npm run lint:script && npm run lint:format -- --check",
-    "lintfix": "npm run lint:script -- --fix && npm run lint:format -- --write",
+    "lint:script": "oxlint --quiet src",
+    "lint:format": "oxfmt src",
+    "lint": "pnpm lint:script && pnpm lint:format --check",
+    "lintfix": "pnpm lint:script --fix && pnpm lint:format --write",
     "prepare": "husky"
   },
   "dependencies": {
@@ -55,10 +53,10 @@
   },
   "lint-staged": {
     "*.{js,cjs,ts,vue}": [
-      "npm run lint:partOfScript"
+      "oxlint --quiet"
     ],
     "*.{js,cjs,ts,vue,css,scss}": [
-      "npm run lint:partOfFormat -- --check"
+      "oxfmt --check"
     ]
   }
 }
