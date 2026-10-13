@@ -56,8 +56,10 @@ class CommonService {
     return await apiClient.post('login', data);
   }
 
-  async getFiles(): Promise<IResponse> {
-    return await apiClient.get('medias');
+  async getFiles(params?: { pageToken?: string; maxResults?: number }): Promise<IResponse> {
+    return await apiClient.get('medias', {
+      params,
+    });
   }
 
   async fileDetail(fileId): Promise<IResponse> {

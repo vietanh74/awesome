@@ -63,7 +63,7 @@
                 >
                   <img
                     src="/defaultPreview.jpg"
-                    class="w-full h-auto min-h-[80px] block object-cover"
+                    class="w-full h-auto min-h-20 block object-cover"
                     loading="lazy"
                   />
                 </ImageOrDefault>
@@ -87,6 +87,31 @@
           </div>
         </div>
       </div>
+
+      <div class="flex items-center justify-center min-h-16 py-4">
+        <div v-if="isLoadingMore" class="flex items-center gap-2 text-xs text-[#64748b]">
+          <Spin size="small" />
+          Đang tải thêm...
+        </div>
+
+        <button
+          v-else-if="screenState.loadMoreFailed"
+          type="button"
+          class="px-3 py-1.5 rounded-full border border-[#e2e8f0] bg-[#ffffff] text-xs text-[#475569] shadow-sm hover:border-[#cbd5e1] hover:text-[#0f172a] transition-colors cursor-pointer"
+          @click="retryLoadMore"
+        >
+          Tải thất bại · Thử lại
+        </button>
+
+        <div
+          v-else-if="!screenState.nextPageToken && !isEmpty(mediaFiles)"
+          class="flex items-center gap-3 text-xs text-[#94a3b8]"
+        >
+          <span class="h-px w-10 bg-[#e2e8f0]" />
+          Đã hiển thị toàn bộ {{ size(mediaFiles) }} video
+          <span class="h-px w-10 bg-[#e2e8f0]" />
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -95,22 +120,31 @@
 import { computed, onMounted, reactive, ref } from 'vue';
 import { Spin, message, Modal, Dropdown, Menu } from 'ant-design-vue';
 import { useRouter } from 'vue-router';
-import { map } from 'lodash-es';
+import { isEmpty, map, size } from 'lodash-es';
 import { CopyOutlined, SendOutlined, DeleteOutlined, MoreOutlined } from '@ant-design/icons-vue';
-import { useClipboard } from '@vueuse/core';
+import { useClipboard, useInfiniteScroll } from '@vueuse/core';
 
 import { commonService } from '@/services';
 import { RouteName } from '@/shared/constants';
 import { ImageOrDefault } from '@/components';
 
 const MenuItem = Menu.Item;
+const PAGE_SIZE = 30;
 
 const router = useRouter();
 const screenState = reactive({
   fetching: false,
+  loadMoreFailed: false,
+  nextPageToken: null as string | null,
 });
 const mediaFiles = ref<any[]>([]);
 const { copy } = useClipboard();
+
+// Chỉ load thêm khi còn trang sau và lần trước không lỗi (tránh gọi lặp)
+const { isLoading: isLoadingMore } = useInfiniteScroll(window, loadMore, {
+  distance: 400,
+  canLoadMore: () => !screenState.fetching && !!screenState.nextPageToken && !screenState.loadMoreFailed,
+});
 
 const colSize = ref<number>(2);
 
@@ -132,13 +166,40 @@ onMounted(() => {
 async function getList() {
   screenState.fetching = true;
 
-  const { error, data } = await commonService.getFiles().finally(() => (screenState.fetching = false));
+  const { error, data } = await commonService
+    .getFiles({ maxResults: PAGE_SIZE })
+    .finally(() => (screenState.fetching = false));
 
   if (error) {
     return;
   }
 
-  mediaFiles.value = map(data, (item) => ({
+  mediaFiles.value = normalizeMediaFiles(data.items);
+  screenState.nextPageToken = data.nextPageToken;
+}
+
+async function loadMore() {
+  const { error, data } = await commonService.getFiles({
+    pageToken: screenState.nextPageToken as string,
+    maxResults: PAGE_SIZE,
+  });
+
+  if (error) {
+    screenState.loadMoreFailed = true;
+    return;
+  }
+
+  mediaFiles.value = [...mediaFiles.value, ...normalizeMediaFiles(data.items)];
+  screenState.nextPageToken = data.nextPageToken;
+}
+
+function retryLoadMore() {
+  // canLoadMore đổi → useInfiniteScroll tự kiểm tra và gọi lại loadMore
+  screenState.loadMoreFailed = false;
+}
+
+function normalizeMediaFiles(items) {
+  return map(items, (item) => ({
     ...item,
     name: item.name.replace('tests/', '').replace('.mp4', ''),
   }));
