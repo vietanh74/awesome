@@ -20,6 +20,9 @@ const routes: RouteRecordRaw[] = [
     path: '',
     name: RouteName.HOMEPAGE,
     component: Homepage,
+    meta: {
+      isPublic: true,
+    },
   },
   {
     path: 'report',
