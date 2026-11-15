@@ -1,7 +1,22 @@
 <template>
   <div ref="scrollContainer" class="h-screen overflow-y-auto">
-    <div v-if="screenState.fetching" class="h-full flex items-center justify-center">
+    <div class="px-1 pt-2">
+      <Input v-model:value="keyword" allow-clear placeholder="Tìm theo tên video" :maxlength="100">
+        <template #prefix>
+          <SearchOutlined class="text-slate-400" />
+        </template>
+      </Input>
+    </div>
+
+    <div v-if="screenState.fetching" class="h-[60vh] flex items-center justify-center">
       <Spin />
+    </div>
+
+    <div
+      v-else-if="isEmpty(mediaFiles) && !screenState.nextPageToken && !screenState.loadMoreFailed"
+      class="h-[60vh] flex items-center justify-center text-sm text-slate-400"
+    >
+      {{ searchKeyword ? `Không tìm thấy video nào khớp "${searchKeyword}"` : 'Chưa có video nào' }}
     </div>
 
     <div v-else class="py-4 px-1">
@@ -108,7 +123,7 @@
           class="flex items-center gap-3 text-xs text-[#94a3b8]"
         >
           <span class="h-px w-10 bg-[#e2e8f0]" />
-          Đã hiển thị toàn bộ {{ size(mediaFiles) }} video
+          Đã hiển thị toàn bộ {{ size(mediaFiles) }} video{{ searchKeyword ? ' phù hợp' : '' }}
           <span class="h-px w-10 bg-[#e2e8f0]" />
         </div>
       </div>
@@ -118,11 +133,17 @@
 
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref, useTemplateRef } from 'vue';
-import { Spin, message, Modal, Dropdown, Menu } from 'ant-design-vue';
-import { useRouter } from 'vue-router';
-import { isEmpty, map, size } from 'lodash-es';
-import { CopyOutlined, SendOutlined, DeleteOutlined, MoreOutlined } from '@ant-design/icons-vue';
-import { useClipboard, useInfiniteScroll } from '@vueuse/core';
+import { Spin, message, Modal, Dropdown, Menu, Input } from 'ant-design-vue';
+import { useRoute, useRouter } from 'vue-router';
+import { isEmpty, map, size, trim } from 'lodash-es';
+import {
+  CopyOutlined,
+  SendOutlined,
+  DeleteOutlined,
+  MoreOutlined,
+  SearchOutlined,
+} from '@ant-design/icons-vue';
+import { useClipboard, useInfiniteScroll, watchDebounced } from '@vueuse/core';
 
 import { commonService } from '@/services';
 import { RouteName } from '@/shared/constants';
@@ -131,7 +152,17 @@ import { ImageOrDefault } from '@/components';
 const MenuItem = Menu.Item;
 const PAGE_SIZE = 30;
 
+const route = useRoute();
 const router = useRouter();
+
+// keyword: giá trị đang gõ; searchKeyword: keyword đã áp dụng cho danh sách hiện tại (sau debounce)
+// Giữ trên URL (?q=) để F5 hoặc quay lại từ trang khác vẫn còn kết quả search
+const keyword = ref<string>(trim(route.query.q as string));
+const searchKeyword = ref<string>(keyword.value);
+
+// Mỗi lần search mới tăng id → response của lần search cũ về muộn sẽ bị bỏ qua
+let requestId = 0;
+
 const screenState = reactive({
   fetching: false,
   loadMoreFailed: false,
@@ -160,16 +191,46 @@ const galleryMediaFiles = computed(() => {
   return results;
 });
 
+watchDebounced(
+  keyword,
+  (value) => {
+    const nextKeyword = trim(value);
+
+    if (nextKeyword === searchKeyword.value) {
+      return;
+    }
+
+    searchKeyword.value = nextKeyword;
+    router.replace({ query: { ...route.query, q: nextKeyword || undefined } });
+    scrollContainer.value?.scrollTo({ top: 0 });
+    getList();
+  },
+  { debounce: 400 },
+);
+
 onMounted(() => {
   getList();
 });
 
 async function getList() {
-  screenState.fetching = true;
+  const currentRequestId = ++requestId;
 
-  const { error, data } = await commonService
-    .getFiles({ maxResults: PAGE_SIZE })
-    .finally(() => (screenState.fetching = false));
+  screenState.fetching = true;
+  screenState.loadMoreFailed = false;
+  screenState.nextPageToken = null;
+  mediaFiles.value = [];
+
+  const { error, data } = await commonService.getFiles({
+    maxResults: PAGE_SIZE,
+    keyword: searchKeyword.value || undefined,
+  });
+
+  // Đã có lần search mới hơn → bỏ kết quả này
+  if (currentRequestId !== requestId) {
+    return;
+  }
+
+  screenState.fetching = false;
 
   if (error) {
     return;
@@ -180,10 +241,18 @@ async function getList() {
 }
 
 async function loadMore() {
+  const currentRequestId = requestId;
+
   const { error, data } = await commonService.getFiles({
     pageToken: screenState.nextPageToken as string,
     maxResults: PAGE_SIZE,
+    keyword: searchKeyword.value || undefined,
   });
+
+  // Keyword đã đổi trong lúc đang load trang sau → trang này thuộc kết quả cũ
+  if (currentRequestId !== requestId) {
+    return;
+  }
 
   if (error) {
     screenState.loadMoreFailed = true;
