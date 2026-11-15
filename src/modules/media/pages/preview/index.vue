@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div v-if="screenState.fetching" class="h-screen flex items-center justify-center">
+  <div ref="scrollContainer" class="h-screen overflow-y-auto">
+    <div v-if="screenState.fetching" class="h-full flex items-center justify-center">
       <Spin />
     </div>
 
@@ -117,7 +117,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref } from 'vue';
+import { computed, onMounted, reactive, ref, useTemplateRef } from 'vue';
 import { Spin, message, Modal, Dropdown, Menu } from 'ant-design-vue';
 import { useRouter } from 'vue-router';
 import { isEmpty, map, size } from 'lodash-es';
@@ -139,9 +139,10 @@ const screenState = reactive({
 });
 const mediaFiles = ref<any[]>([]);
 const { copy } = useClipboard();
+const scrollContainer = useTemplateRef<HTMLElement>('scrollContainer');
 
 // Chỉ load thêm khi còn trang sau và lần trước không lỗi (tránh gọi lặp)
-const { isLoading: isLoadingMore } = useInfiniteScroll(window, loadMore, {
+const { isLoading: isLoadingMore } = useInfiniteScroll(scrollContainer, loadMore, {
   distance: 400,
   canLoadMore: () => !screenState.fetching && !!screenState.nextPageToken && !screenState.loadMoreFailed,
 });
