@@ -78,6 +78,11 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/modules/media/pages/preview/index.vue'),
   },
   {
+    path: 'r',
+    name: RouteName.REORDER_FILES,
+    component: () => import('@/modules/media/pages/ReorderFiles/index.vue'),
+  },
+  {
     path: 'p/:fileId',
     name: RouteName.PREVIEW_DETAIL,
     component: () => import('@/modules/media/pages/previewDetail/index.vue'),

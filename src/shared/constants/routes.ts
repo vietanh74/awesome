@@ -10,5 +10,6 @@ export enum RouteName {
   UPLOAD_IMAGE = 'UploadImage',
   PREVIEW = 'Preview',
   PREVIEW_DETAIL = 'PreviewDeail',
+  REORDER_FILES = 'ReorderFiles',
   LOGIN = 'Login',
 }

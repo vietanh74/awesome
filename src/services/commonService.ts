@@ -62,6 +62,10 @@ class CommonService {
     });
   }
 
+  async reorderFiles(): Promise<IResponse> {
+    return await apiClient.post('reorder-files');
+  }
+
   async fileDetail(fileId): Promise<IResponse> {
     return await apiClient.post('media-detail', {
       fileId,
