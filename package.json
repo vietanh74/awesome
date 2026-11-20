@@ -49,9 +49,9 @@
     "vue-tsc": "^3.3.9"
   },
   "volta": {
-    "node": "24.19.0",
-    "pnpm": "11.24.0"
+    "node": "24.19.0"
   },
+  "packageManager": "pnpm@12.16.1"
   "lint-staged": {
     "*.{js,cjs,ts,vue}": [
       "oxlint --quiet"
